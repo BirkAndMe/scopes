@@ -1,0 +1,4 @@
+@function __map-set($map, $key, $value) {
+  $buffer: (#{$key}: $value);
+  @return map-merge($map, $buffer);
+}

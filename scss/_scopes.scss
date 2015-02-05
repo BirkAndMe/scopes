@@ -1,0 +1,174 @@
+// @todo Find ud af om det er hurtigere at referere til et scope object (map),
+//       i stedet for at bruge navnet og så scope_get så tit.
+
+//
+$__scope_default: default_scope !default;
+//
+$__scope: $__scope_default !default;
+
+//
+$__scope_default_settings: (
+  fallback: false,
+);
+
+//
+$__scopes: ();
+
+//
+$__scope_list: ();
+
+// Create a new scope.
+//
+// @param {String} $scope_name ($__scope_default)
+//   - Name of the scope.
+@function scope-create($scope_name: $__scope_default, $settings: ()) {
+  $settings: map-merge($__scope_default_settings, $settings);
+  
+  // @todo validate settings. perhaps use a function exist thingie, for each
+  //       different setting.
+  
+  // Det er vigtigt at vi tjekker om fallback laver en loop!!
+  
+  $__scopes: __map-set($__scopes, $scope_name, (settings: $settings)) !global;
+  
+  @return $scope_name;
+}
+
+// Get a scope.
+//
+// @param {String} $scope_name ($__scope)
+//   - Name of the scope.
+@function scope-get($scope_name: $__scope) {
+  @return map-get($__scopes, $scope_name);
+}
+
+// Set scope data.
+//
+// @param {Map} $scope
+//   - The actual scope data.
+// @param {String} $scope_name ($__scope)
+//   - Name of the scope.
+@function scope-set($scope, $scope_name: $__scope) {
+  $__scopes: __map-set($__scopes, $scope_name, $scope) !global;
+  @return $scope;
+}
+
+//
+@function scope-get-module($module_name, $scope_name: $__scope) {
+  $scope: scope_get($scope_name);
+  
+  $module: map-get($scope, $module_name);
+  
+  @if ($module == null) {
+    @return ();
+  }
+  
+  @return $module;
+}
+
+//
+@function scope-set-module($module_name, $module: (), $scope_name: $__scope) {
+  $scope: scope_get($scope_name);
+  
+  $scope: __map-set($scope, $module_name, $module);
+  
+  $nop: scope-set($scope, $scope_name);
+  
+  @return $module;
+}
+
+//
+@function scope-set-variable($module_name, $key, $value, $scope_name: $__scope) {
+  $module: scope-get-module($module_name, $scope_name);
+  
+  $module: __map-set($module, $key, $value);
+  
+  $nop: scope-set-module($module_name, $module, $scope_name);
+  
+  @return $value;
+}
+
+//
+@function scope-get-variable($module_name, $key, $scope_name: $__scope, $default_value: use_fallback) {
+  $module: scope-get-module($module_name, $scope_name);
+  
+  $buffer: map-get($module, $key);
+  
+  @if ($buffer == null) {
+    $buffer: $default_value;
+    
+    @if ($default_value == use_fallback) {
+      $scope: scope-get($scope_name);
+      $fallback_scope: scope-get-setting(fallback, $scope);
+      
+      @if ($fallback_scope != false) {
+        $buffer: scope-get-variable($module_name, $key, $fallback_scope, $default_value);
+      } @else {
+        $buffer: null;
+      }
+    }
+  }
+  
+  @return $buffer;
+}
+
+@function scope-get-setting($setting, $scope) {
+  $settings: map-get($scope, settings);
+  @return map-get($settings, $setting);
+}
+
+//
+@function scope-set-variables($module_name, $variables, $scope_name: $__scope) {
+  $module: scope-get-module($module_name, $scope_name);
+  
+  $module: map-merge($module, $variables);
+  
+  @return scope-set-module($module_name, $module, $scope_name);
+}
+
+
+
+// @debug scope-set-variable('breakpoint', 'key', 'value');
+// @debug scope-set-variable('breakpoint', 'key2', 'value');
+// @debug scope-set-variables('breakpoint', (key2: nothing, nha: kj));
+
+//
+@mixin scope($name: $__scope_default) {
+  $current_scope: $__scope;
+  
+  $__scope: $name !global;
+  
+  @content;
+  
+  $__scope: $current_scope !global;
+}
+
+
+// @debug '';
+// @debug 'Create scopes';
+// @debug '-------------';
+// @debug scope-create();
+// @debug scope-create('abcd', (fallback: $__scope_default));
+
+// @debug '';
+// @debug 'Set variables';
+// @debug '-------------';
+// @debug scope-set-variable('mod one', 'key one', 'value one');
+// @debug scope-set-variable('mod one', 'key two', 'value two');
+// @debug scope-set-variable('mod one', 'key one', 'value one', 'abcd');
+
+// @debug '';
+// @debug 'Get variables';
+// @debug '-------------';
+// @debug scope-get-variable('mod one', 'key one');
+// @debug scope-get-variable('mod one', 'key two');
+// @debug scope-get-variable('mod one', 'key one', 'abcd');
+// @debug scope-get-variable('mod one', 'key two', 'abcd');
+
+
+// @debug '';
+// @debug 'scopes';
+// @debug '------';
+// @debug $__scopes;
+
+// @debug $__scopes;

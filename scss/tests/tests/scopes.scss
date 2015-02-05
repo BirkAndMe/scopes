@@ -1,0 +1,66 @@
+@import '../../../scss/misc';
+@import '../true/true';
+
+@include test-module('scopes') {
+  //
+  @include test('scope') {
+    //
+    @include assert-equal(
+      scope-create(),
+      $__scope_default,
+      'Create default scope.'
+    );
+    
+    //
+    @include assert-equal(
+      scope-create('secondaryscope', (fallback: $__scope_default)),
+      'secondaryscope',
+      'A secondary scope.'
+    );
+    
+    //
+    @include assert-equal(
+      scope-create('thirdfallback', (fallback: 'secondaryscope')),
+      'thirdfallback',
+      'Nested fallback.'
+    );
+  }
+  
+  //
+  @include test('module') {
+    //
+    @include assert-equal(
+      scope-set-module('modone', ()),
+      (),
+      'Default module.'
+    );
+    
+    //
+    @include assert-equal(
+      scope-set-module('modsimple', simpletext),
+      simpletext,
+      'A very simple module.'
+    );
+    
+    //
+    @include assert-equal(
+      scope-get-module('somethingrandom'),
+      (),
+      'Get undefined module.'
+    );
+    
+    //
+    @include assert-equal(
+      scope-get-module('modsimple'),
+      simpletext,
+      'Get existing moduel.'
+    );
+    
+    //
+    // @include assert-equal(
+      // scope-create('secondaryscope'),
+      // 'secondaryscope',
+      // 'Create default scope.'
+    // );
+  }
+}

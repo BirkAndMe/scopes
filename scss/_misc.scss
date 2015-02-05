@@ -1,0 +1,123 @@
+@import 'helpers', 'scopes';
+
+// Burug ordet "scope" i stedet for "breakpoint".
+
+$__default_breakpoint: 'default_breakpoint' !default;
+
+$__breakpoint: 'default_breakpoint' !default;
+
+// col(x of y, [responsive, list, no-margin, no-float])
+
+// @var {Map} - A holder for all the grids.
+$__breakpoints: () !default;
+
+$__vars: () !default;
+
+// Create a grid for the given breakpoint.
+//
+// @param {String} $breakpoint - value to clamp
+// @param {Map} $settings - minimal value
+@mixin create-breakpoint($settings: (), $name: $__default_breakpoint) {
+  $__breakpoints: __map-set($__breakpoints, $name, $settings) !global;
+  $__vars: __map-set($__vars, $name, ()) !global;
+}
+
+@mixin breakpoint($name: $__default_breakpoint) {
+  //
+  $current_breakpoint: $__breakpoint;
+  
+  //
+  $__breakpoint: $name !global;
+
+  //
+  @content;
+  
+  //
+  $__breakpoint: $current_breakpoint !global;
+}
+
+// Is this really needed?
+@function current-breakpoint() {
+  @return $__breakpoint;
+}
+
+
+// ------------------------------
+// use sassyjson: https://github.com/HugoGiraudel/SassyJSON/blob/master/dist/_SassyJSON.scss
+// to send this out.
+
+// Get a variable.
+//
+// @param {string} $name
+//   - Name of the variable
+// @param {mixed} $default_value (null)
+//   - Default value to return, if the variable doesn't exist, or it's
+//     explicitely null.
+// @param {string} $breakpoint ($__breakpoint)
+//   - The breakpoint scope, the variable is located in.
+//     This is automatically the current scope.
+@function getvar($name, $default_value: null, $breakpoint: $__breakpoint, $try_fallback: true) {
+  // Get the current breakpoint scope.
+  $buffer: map-get($__vars, $breakpoint);
+  
+  // If the scope exists get the variable.
+  @if $buffer != null {
+    $buffer: map-get($buffer, $name);
+  }
+  // Warn the user if the scope doesn't exist.
+  @else {
+    @warn 'Breakpoint "#{$breakpoint}" is missing.';
+  }
+  
+  // Look for the variable in the fallback breapoint if it doesn't exist.
+  @if $buffer == null && $try_fallback == true {
+    
+  }
+  
+  // If the variable doesn't exist fill it with the $default_value.
+  @if $buffer == null {
+    $buffer: $default_value;
+  }
+  
+  @return $buffer;
+}
+
+@mixin setvars($vars: (), $breakpoint: $__breakpoint) {
+  $buffer: map-get($__vars, $breakpoint);
+  
+  // Error handle on buffer = null
+  
+  $buffer: map-merge($buffer, $vars);
+  
+  $__vars: __map-set($__vars, $breakpoint, $buffer) !global;
+}
+
+@mixin setvar($name, $value, $breakpoint: $__breakpoint) {
+  $nop: setvar($name, $value, $breakpoint);
+}
+
+@function setvar($name, $value, $breakpoint: $__breakpoint) {
+  // Get the current map of variables for the specific grid.
+  $buffer: map-get($__vars, $breakpoint);
+  
+  // Error handle on buffer = null
+  
+  // Set the new variable in that map.
+  $buffer: __map-set($buffer, $name, $value);
+  
+  // And save this on top of the old map.
+  $__vars: __map-set($__vars, $breakpoint, $buffer) !global;
+  
+  @return $value;
+}
+
+
+
+
+
+
+
+
+
+
+

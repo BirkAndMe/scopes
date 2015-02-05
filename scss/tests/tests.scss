@@ -1,0 +1,67 @@
+@import '../../scss/misc';
+@import 'true/true';
+
+//
+@include create-breakpoint();
+
+@include create-breakpoint((
+  fallback: current-breakpoint()
+), 'secondscope');
+
+@include test-module('Variables') {
+  //
+  @include test('Set variables [function]') {
+
+    //
+    @include assert-equal(
+      setvar('foo', 'bar'),
+      'bar',
+      'Simple setvar.'
+    );
+
+    //
+    @include assert-equal(
+      setvar(foo, bar),
+      bar,
+      'Simple setvar without the string quotes.'
+    );
+
+    @include breakpoint('secondscope') {
+
+      @include assert-equal(
+        setvar('secondfoo', secondbar),
+        secondbar,
+        'Set variable in automatically set scope, via the breakpoint mixin.'
+      );
+    }
+  }
+
+  //
+  @include test('Get variables [function]') {
+
+    //
+    @include assert-equal(
+      getvar('non-existing-varname', 'asdf'),
+      'asdf',
+      'Default value.'
+    );
+
+    //
+    @include assert-equal(
+      getvar('foo'),
+      'bar',
+      'Simple getvar.'
+    );
+
+
+    @include breakpoint('secondscope') {
+      //
+      @include assert-equal(
+        getvar('foo'),
+        null,
+        'Get variable from automatically set scope, via the breakpoint mixin.'
+      );
+    }
+
+  }
+}
