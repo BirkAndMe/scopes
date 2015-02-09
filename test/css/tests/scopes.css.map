@@ -1,0 +1,7 @@
+{
+"version": 3,
+"mappings": "AAKE,IAAK;EACH,IAAI,EAAE,CAAC",
+"sources": ["../../../scss/tests/scopes.scss"],
+"names": [],
+"file": "scopes.css"
+}

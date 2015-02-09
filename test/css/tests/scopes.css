@@ -1,4 +1,7 @@
-@import '../../../scss/misc';
+body {
+  left: 0; }
+
+/*@import '../../../scss/misc';
 @import '../true/true';
 
 @include test-module('scopes') {
@@ -63,4 +66,6 @@
       // 'Create default scope.'
     // );
   }
-}
+}*/
+
+/*# sourceMappingURL=scopes.css.map */

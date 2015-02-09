@@ -1,0 +1,8 @@
+// Depends on settings
+
+/// 
+@function scope-variable-set() {
+}
+
+/// @alias scope-variable-set
+@function vset() { scope-variable-set() }
