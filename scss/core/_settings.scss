@@ -1,0 +1,38 @@
+////
+/// @group Settings
+/// @author Philip Birk-Jensen
+////
+
+/// Default settings
+$scope_settings_default: (fallback: null) !default;
+
+/// On SCOPE_CREATE.
+@function scope-settings-SCOPE_CREATE($data) {
+  $settings: map-get($data, settings);
+  @if ($settings == null) {
+    $settings: ();
+  }
+
+  $settings: map-merge($scope_settings_default, $settings);
+
+  $nop: scope-module-set(settings, $settings, map-get($data, scope_name));
+  @return true;
+}
+$nop: scope-module-on(SCOPE_CREATE, 'settings');
+
+/// Get a scope setting.
+@function scope-settings-get($setting, $scope_name: $__scope) {
+  $settings: scope-module-get(settings, $scope_name);
+  @return map-get($settings, $setting);
+}
+
+/// Set a scope setting.
+@function scope-settings-set($setting, $value, $scope_name: $__scope) {
+  @return scope-module-set-variable(settings, $setting, $value, $scope_name);
+  // $settings: scope-module-get(settings, $scope_name);
+  // $settings: __map-set($settings, $setting, $value);
+
+  // $nop: scope-module-set(settings, $settings, $scope_name);
+
+  // @return $value;
+}

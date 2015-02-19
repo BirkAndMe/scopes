@@ -1,0 +1,69 @@
+/// Create a new scope.
+///
+/// @param {String|Map} $scope_name ($__scope_default)
+///   Name of the scope.
+///   Or a map structure. When Using a map this will be used as the $data
+///   argument, and the $__scope_default will be used as the scope name.
+/// @param {Map} $data (())
+///   Scope configurations.
+///
+/// @example scss - Simple usecase
+///   $scope_name: scope-create(myscope);
+///
+/// @example scss - With a media query
+///   $scope_name: scope-create(myscope, (query: 'min'));
+@function scope-create($scope_name: $__scope_default, $data: ()) {
+  @if (type-of($scope_name) == map) {
+    $data: $scope_name;
+    $scope_name: $__scope_default;
+  }
+
+  // Set the scope_name as part of the data
+  $data: __map-set($data, scope_name, $scope_name);
+
+  // __scope-set() will automatically create the scope if it doesn't exist.
+  $nop: __scope-set($data, $scope_name);
+
+  // Trigger the SCOPE_CREATE event. Allowing modules to do something everytime
+  // a new scope is created.
+  $nop: scope-module-trigger(SCOPE_CREATE, $data);
+
+  @return $scope_name;
+}
+
+/// Use a scope.
+///
+/// If the scope doesn't exist it will automatically be created.
+///
+/// @param {String} $scope_name ($__scope_default)
+///   Name of the scope.
+/// @param {Map} $data (())
+///   Scope configurations.
+@mixin scope($scope_name: $__scope_default, $data: ()) {
+  $scope: __scope-get($scope_name);
+
+  // Automatically create the scope if it doesn't exist.
+  @if ($scope == null) {
+    $scope_name: scope-create($scope_name, $data);
+    $scope: __scope-get($scope_name);
+  }
+
+  // Save the current scope so we can reset it later.
+  $current_scope: $__scope;
+
+  // Set the scope.
+  $__scope: $scope_name !global;
+
+  // If there's no media query, simply print the content.
+  $query: scope-media-query-get();
+  @if ($query == false) {
+    @content;
+  }
+  // If there's a media query wrap the content in it.
+  @else {
+    @media ($query) { @content; }
+  }
+
+  // Reset the scope.
+  $__scope: $current_scope;
+}

@@ -1,79 +1,22 @@
 @import 'true/true';
 
-@import '../base';
-
-@include scope() {
-  body {
-    left: 0;
-  }
-}
-
-@debug $__scopes;
-
-
-/*@import '../../../scss/misc';
-@import '../true/true';
+@import '../scopes';
 
 @include test-module('scopes') {
-  //
-  @include test('scope') {
-    //
+  @include test('scope-create') {
     @include assert-equal(
-      scope-create(),
-      $__scope_default,
-      'Create default scope.'
+      scope-create(), $__scope_default,
+      "Create the default scope, and make sure scope returns it's own name."
     );
-    
-    //
+
     @include assert-equal(
-      scope-create('secondaryscope', (fallback: $__scope_default)),
-      'secondaryscope',
-      'A secondary scope.'
+      scope-create(test_scope), test_scope,
+      "Check we can create new scopes without using the default."
     );
-    
-    //
+
     @include assert-equal(
-      scope-create('thirdfallback', (fallback: 'secondaryscope')),
-      'thirdfallback',
-      'Nested fallback.'
+      map-keys($__scopes), ($__scope_default, test_scope),
+      "Make sure our newly created scopes exist in the $__scopes"
     );
   }
-  
-  //
-  @include test('module') {
-    //
-    @include assert-equal(
-      scope-set-module('modone', ()),
-      (),
-      'Default module.'
-    );
-    
-    //
-    @include assert-equal(
-      scope-set-module('modsimple', simpletext),
-      simpletext,
-      'A very simple module.'
-    );
-    
-    //
-    @include assert-equal(
-      scope-get-module('somethingrandom'),
-      (),
-      'Get undefined module.'
-    );
-    
-    //
-    @include assert-equal(
-      scope-get-module('modsimple'),
-      simpletext,
-      'Get existing moduel.'
-    );
-    
-    //
-    // @include assert-equal(
-      // scope-create('secondaryscope'),
-      // 'secondaryscope',
-      // 'Create default scope.'
-    // );
-  }
-}*/
+}

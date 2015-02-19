@@ -1,0 +1,110 @@
+$__scope_grid_name: null;
+$__scope_grid_count: 10;
+$__scope_grid_gutter: 1%;
+
+///
+@function __scope-grid-gutter($container, $count: $__scope_grid_count, $gutter: $__scope_grid_gutter) {
+  @return ($count / $container) * $gutter;
+}
+
+///
+@function __scope-grid-single-width($container, $count: $__scope_grid_count, $gutter: $__scope_grid_gutter) {
+  $gutter: __scope-grid-gutter($container, $count, $gutter);
+
+  @return (100% - $gutter * ($container - 1)) / $container;
+}
+
+///
+@function __scope-grid-width($columns, $container, $count: $__scope_grid_count, $gutter: $__scope_grid_gutter) {
+  $gutter: __scope-grid-gutter($container, $count, $gutter);
+  $width: __scope-grid-single-width($container, $count, $gutter);
+  @return $width * $columns + $gutter * ($columns - 1);
+}
+
+///
+// TODO Optimize this function so it doesn't call the get variables multiple
+//      times, instead use a single call.
+//      Perhaps make the module-get function use fallbacks.
+@function __scope-grid-set-globals($scope_name: $__scope) {
+
+  // Don't set the grid variables again, if they're already set to the given
+  // scope.
+  @if ($__scope_grid_name == $scope_name) {
+    @return $scope_name;
+  }
+  $__scope_grid_name: $scope_name;
+
+  $__scope_grid_count: scope-module-get-variable(
+    grid,
+    count,
+    USE_FALLBACK,
+    $__scope
+  ) !global;
+
+  $__scope_grid_gutter: scope-module-get-variable(
+    grid,
+    gutter,
+    USE_FALLBACK,
+    $__scope
+  ) !global;
+
+  @return $scope_name;
+}
+
+@function grid-parse($data: (), $scope_name: $__scope) {
+  $count: map-get($data, 'count');
+  $gutter: map-get($data, 'gutter');
+  $column: map-get($data, 'column');
+  $width: map-get($data, 'width');
+
+  @if ($count == null) {
+    @if ($gutter == null) {
+      @if ($column == null) {
+
+      }
+    }
+  }
+  @else {
+    @if ($gutter == null) {
+      @if ($column == null) {
+        $column: percentage($count / 100);
+      }
+
+      @if (unit($column) != '%') {
+        @if ($width == null) {
+          @warn "Unable to parse grid data: You need to supply a width.";
+        }
+
+        $column: percentage($column / $width);
+      }
+
+      $gutter: (100 - $count * $column) / ($count - 1);
+    }
+
+    @if (unit($gutter) != '%') {
+      @if ($column == null) {
+        @if ($width == null) {
+          @warn "Unable to parse grid data: You need to supply a width or column."
+        }
+
+        $column: ($width + $gutter) / $count - $gutter;
+      }
+
+      $gutter: percentage($gutter / (($column + $gutter) * $count - $gutter));
+    }
+  }
+
+
+  @return scope-module-set(grid, (count: $count, gutter: $gutter), $scope_name);
+}
+
+///
+@function grid-gutter($container: null, $scope_name: $__scope) {
+  $nop: __scope-grid-set-globals($scope_name);
+
+  @if ($container == null) {
+    $container: $__scope_grid_count;
+  }
+
+  @return __scope-grid-gutter($container);
+}

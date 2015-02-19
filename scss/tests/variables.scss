@@ -1,0 +1,52 @@
+@import 'true/true';
+
+@import '../scopes';
+
+@include test-module('variable') {
+
+  // Create 3 scopes
+  $nop: scope-create((variables: (varindefault: 'something', inall: 'first')));
+  $nop: scope-create(second, (settings: (fallback: $nop), variables: (inall: 'second')));
+  $nop: scope-create(last, (settings: (fallback: second), variables: (inall: 'last')));
+
+
+  @include test('scope-variables-get') {
+    @include assert-equal(
+      scope-variable-get('varindefault'), 'something',
+      "Variable created during scope-create initialization."
+    );
+
+    @include assert-equal(
+      scope-variable-get('varindefault', USE_FALLBACK, second), 'something',
+      "Fallback 1 level"
+    );
+
+    @include assert-equal(
+      scope-variable-get('varindefault', USE_FALLBACK, last), 'something',
+      "Fallback 2 levels"
+    );
+
+    @include assert-equal(
+      scope-variable-get('inall', USE_FALLBACK, last), 'last',
+      "Get variable with a value and a fallback value."
+    );
+  }
+
+
+  @include test('scope-variables-set') {
+    @include assert-equal(
+      scope-variable-set('asd', dsa), dsa,
+      "Set a value."
+    );
+
+    @include assert-equal(
+      scope-variable-get('asd'), 'dsa',
+      "Is the value set actually set."
+    );
+  }
+
+
+  @include test('scope-variables-merge') {
+
+  }
+}

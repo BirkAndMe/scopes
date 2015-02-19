@@ -23,7 +23,8 @@ $__scope_triggers: ();
 /// @return {Map}
 ///   The complete scope map.
 @function __scope-get($scope_name: $__scope) {
-  @return map-get($__scopes, $scope_name);
+  $scope: map-get($__scopes, $scope_name);
+  @return $scope;
 }
 
 /// Set scope data.
@@ -52,19 +53,16 @@ $__scope_triggers: ();
 /// @return {String}
 ///   The function name
 @function __scope-trigger-add($trigger_name, $function) {
-
-  @debug function_exists($function);
-
   $triggers: map-get($__scope_triggers, $trigger_name);
-  
+
   @if ($triggers == null) {
     $triggers: ($function);
   } @else {
     $triggers: append($triggers, $function, comma);
   }
-  
+
   $__scope_triggers: __map-set($__scope_triggers, $trigger_name, $triggers) !global;
-  
+
   @return $function;
 }
 
@@ -79,18 +77,18 @@ $__scope_triggers: ();
 ///   The combined result of the calls
 @function __scope-trigger($trigger_name, $data: ()) {
   $triggers: map-get($__scope_triggers, $trigger_name);
-  
+
   @if ($triggers == null) {
     $triggers: ();
   }
-  
+
   $result: true;
-  
+
   @each $trigger in $triggers {
     @if (function_exists($trigger)) {
       $result: $result and call($trigger, $data);
     }
   }
-  
+
   @return $result;
 }

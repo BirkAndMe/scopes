@@ -1,0 +1,78 @@
+/// Register a module "on" an event.
+@function scope-module-on($on, $module_name) {
+  @return __scope-trigger-add($on, scope- + $module_name + -$on);
+}
+
+/// Trigger an event.
+@function scope-module-trigger($trigger, $data: ()) {
+  @return __scope-trigger($trigger, $data);
+}
+
+/// Set module data.
+@function scope-module-set($module_name, $module: (), $scope_name: $__scope) {
+  //
+  $scope: __scope-get($scope_name);
+
+  //
+  $scope: __map-set($scope, $module_name, $module);
+
+  //
+  $nop: __scope-set($scope, $scope_name);
+
+  @return $module;
+}
+
+/// Get the module data.
+@function scope-module-get($module_name, $scope_name: $__scope) {
+  //
+  $scope: __scope-get($scope_name);
+  //
+  $module: map-get($scope, $module_name);
+
+  @if ($module == null) {
+    $module: ();
+  }
+
+  @return $module;
+}
+
+/// Set a single module variable.
+@function scope-module-set-variable($module_name, $key, $value, $scope_name: $__scope) {
+  $variables: scope-module-get($module_name, $scope_name);
+  $variables: __map-set($variables, $key, $value);
+
+  $nop: scope-module-set($module_name, $variables, $scope_name);
+
+  @return $value;
+}
+
+/// Get a single module variable.
+@function scope-module-get-variable($module_name, $key, $default_value: null, $scope_name: $__scope) {
+  $variables: scope-module-get($module_name, $scope_name);
+
+  $value: map-get($variables, $key);
+
+  //
+  @if ($value == null) {
+    $value: nth($default_value, 1);
+
+    // TODO use the __has_flag() function, this way we can provide a second
+    //      value that will be used as default if there's no fallback.
+    @if ($value == USE_FALLBACK) {
+      $fallback_scope: scope-settings-get(fallback, $scope_name);
+
+      @if ($fallback_scope == null) {
+        @if (length($default_value) == 1) {
+          $value: null;
+        } @else {
+          $value: nth($default_value, 2);
+        }
+      }
+      @else {
+        $value: scope-variable-get($key, $default_value, $fallback_scope);
+      }
+    }
+  }
+
+  @return $value;
+}

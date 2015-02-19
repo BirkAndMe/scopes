@@ -1,0 +1,13 @@
+///
+@function scope-media-query-get($scope_name: $__scope) {
+  $query: scope-module-get(query, $scope_name);
+  @if ($query == ()) {
+    @return false;
+  }
+
+  @return $query;
+}
+
+/// Easily create a media query string.
+@function scope-media-query($query: ()) {
+}

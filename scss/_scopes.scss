@@ -1,71 +1,1 @@
-/// Create a new scope.
-///
-/// @param {String} $scope_name ($__scope_default)
-///   Name of the scope.
-///
-/// @example scss - Usage
-///   $scope_name: scope-create(myscope);
-@function scope-create($scope_name: $__scope_default, $data: ()) {
-  // Set the scope_name as part of the data
-  $data: __map-set($data, scope_name, $scope_name);
-  
-  // __scope-set() will automatically create the scope if it doesn't exist.
-  $nop: __scope-set($data, $scope_name);
-  
-  // Trigger the SCOPE_CREATE event. Allowing modules to do something everytime
-  // a new scope is created.
-  $nop: scope-module-trigger(SCOPE_CREATE, $data);
-  
-  @return $scope_name;
-}
-
-@mixin scope($scope_name: $__scope_default, $data: ()) {
-  // Automatically create the scope if it doesn't exist.
-  $scope: __scope-get($scope_name);
-  @if ($scope == null) {
-    $scope: scope-create($scope_name, $data);
-  }
-  
-  $current_scope: $__scope;
-  $__scope: $scope_name !global;
-  
-  @content;
-  
-  $__scope: $current_scope;
-}
-
-/// Register a module "on" an event.
-@function scope-module-register($on, $module_name) {
-  @return __scope-trigger-add($on, scope- + $module_name + -$on);
-}
-
-/// Trigger an event.
-@function scope-module-trigger($trigger, $data: ()) {
-  @return __scope-trigger($trigger, $data);
-}
-
-// Set module data.
-@function scope-module-set($module_name, $module: (), $scope_name: $__scope) {
-  //
-  $scope: __scope-get($scope_name);
-  
-  //
-  $scope: __map-set($scope, $module_name, $module);
-  
-  // @debug $scope;
-  
-  //
-  $nop: __scope-set($scope, $scope_name);
-  
-  @return $module_name;
-}
-
-// Get a module's data.
-@function scope-module-get($module_name, $scope_name: $__scope) {
-  //
-  $scope: __scope-get($scope_name);
-  //
-  $module: map-get($scope, $module_name);
-  
-  @return $module;
-}
+/////// Import all the files that will make scope work.////// @author Philip Birk-Jensen////@import  // Helper functions used throughout scopes.  'core/helpers',  'core/backend',  'core/module',  'core/media-query',  'core/scope',  'core/settings',  // Add modules to this.  'enabled-modules';

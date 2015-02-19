@@ -1,0 +1,17 @@
+/// Set a single value in a map.
+@function __map-set($map, $key, $value) {
+  $buffer: (#{$key}: $value);
+  @return map-merge($map, $buffer);
+}
+
+///
+/// Check if a list has a certain flag.
+@function __has_flag($list, $flag) {
+  $result: index($list, $flag);
+
+  @if ($result == null) {
+    $result: false;
+  }
+
+  @return $result;
+}
