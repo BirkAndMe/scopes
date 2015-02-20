@@ -40,19 +40,10 @@
 /// @param {Map} $data (())
 ///   Scope configurations.
 @mixin scope($scope_name: $__scope_default, $data: ()) {
-  $scope: __scope-get($scope_name);
-
-  // Automatically create the scope if it doesn't exist.
-  @if ($scope == null) {
-    $scope_name: scope-create($scope_name, $data);
-    $scope: __scope-get($scope_name);
-  }
+  $scope: __scope-get($scope_name, $data);
 
   // Save the current scope so we can reset it later.
-  $current_scope: $__scope;
-
-  // Set the scope.
-  $__scope: $scope_name !global;
+  $current_scope: __scope-activate($scope_name);
 
   // If there's no media query, simply print the content.
   $query: scope-media-query-get();
@@ -65,5 +56,5 @@
   }
 
   // Reset the scope.
-  $__scope: $current_scope;
+  $nop: __scope-activate($current_scope);
 }

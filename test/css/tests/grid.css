@@ -1,6 +1,10 @@
 /* ### grid ---------- */
 /* - calculator functions (4 Assertions, 4 Passed, 0 Failed) */
-/* - FAIL: grid functions (0 Assertions, 0 Passed, 0 Failed) */
+body {
+  width: 100%;
+  margin-right: 2; }
+
+/* - FAIL: grid parse (0 Assertions, 0 Passed, 0 Failed) */
 /*
 */
 /* 2 Tests: */

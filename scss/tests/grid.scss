@@ -5,40 +5,53 @@
 @include test-module('grid') {
   @include test('calculator functions') {
     @include assert-equal(
-      __scope-grid-gutter(10, 10, 1%),
-      1%,
+      __scope-grid-gutter(5, 10, 1%),
+      2%,
       "Gutter calculation function"
     );
 
     @include assert-equal(
-      __scope-grid-single-width(10, 10, 1%),
-      9.1%,
+      __scope-grid-single-width(5, 10, 9.1%),
+      18.2%,
       "Single width calculation function"
     );
 
     @include assert-equal(
-      __scope-grid-width(10, 10, 10, 1%),
+      __scope-grid-width(10, 10, 10, 1%, 9.1%),
       100%,
       "Width calculation function"
     );
     @include assert-equal(
-      __scope-grid-width(5, 10, 10, 1%),
+      __scope-grid-width(5, 10, 10, 1%, 9.1%),
       49.5%,
       "Width calculation function"
     );
   }
 
-  @include test('grid functions') {
+  @include test('grid parse') {
 
-    @include scope() {
+    $fluid_1: (count: 10, gutter: 1%, columnn: 9.1%);
+    // $fluid_2: (count: 10, gutter: 1%, columnn: 9.1%);
+    $fixed_1: (count: 10, gutter: 10px, columnn: 91px);
+    // $g1: (count: 12, gutter: 1%, columnn: 9.1%);
 
-    }
 
 
 
     @debug grid-parse((count: 10, width: 1000px, column: 91px));
     @debug grid-parse((count: 10, width: 1000px, gutter: 10px));
     @debug grid-parse((count: 10, column: 91px, gutter: 10px));
+    @debug grid-parse((count: 10, column: 9.1%));
+    @debug grid-parse((count: 10, gutter: 1%));
+    @debug grid-parse((column: 9.1%, gutter: 1%));
+
+    @debug grid-parse((count: 10, gutter: 10px, column: 91px), FIXED);
+    @debug grid-parse((width: 1000px, gutter: 10px, column: 91px), FIXED);
+    @debug grid-parse((width: 1000px, count: 10, gutter: 10px), FIXED);
+    @debug grid-parse((width: 1000px, count: 10, column: 91px), FIXED);
+
+    $nop: grid-setup((count: 10, gutter: 1%));
+    // @debug grid-gutter();
 
     // @debug $__scopes;
 
@@ -48,5 +61,14 @@
     //   1%,
     //   "Grid gutter"
     // );
+
+    $tmp: false;
+    @if ($tmp) {
+      @debug 'tmp: ' + $tmp;
+    }
+
+body {
+    @include grid(10);
+  }
   }
 }
