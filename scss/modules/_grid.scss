@@ -170,25 +170,17 @@ $__scope_grid_column: 9.1%;
 }
 
 ///
-@function grid-gutter($container: null, $scope_name: $__scope) {
-  $nop: __scope-grid-set-globals($scope_name);
-
-  @if ($container == null) {
-    $container: $__scope_grid_count;
-  }
-
-  @return __scope-grid-gutter($container);
-}
-
 @mixin grid($columns, $container: null, $flags: (FLOAT, MARGIN)) {
   width: grid-width($columns, $container);
 
-  $margin: __has_flag($flags, MARGIN);
-  @if ($margin) {
-    @if ($margin == true) {
-      $margin: __scope-grid-gutter($container);
-    }
-
-    margin-right: $margin;
+  @if (__has_flag($flags, MARGIN)) {
+    margin-right: grid-gutter($container);
   }
 }
+
+/// On SCOPE_CREATE.
+@function scope-grid-SCOPE_ACTIVATE($current_scope, $new_scope) {
+  $nop: __scope-grid-set-globals();
+  @return true;
+}
+$nop: scope-module-on(SCOPE_ACTIVATE, 'grid');

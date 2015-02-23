@@ -1,3 +1,14 @@
+///
+@function scope-activate($scope_name) {
+  $current_scope: $__scope;
+
+  $nop: scope-module-trigger(SCOPE_ACTIVATE, $current_scope, $scope_name);
+
+  $__scope: $scope_name !global;
+
+  @return $current_scope;
+}
+
 /// Create a new scope.
 ///
 /// @param {String|Map} $scope_name ($__scope_default)
@@ -43,7 +54,7 @@
   $scope: __scope-get($scope_name, $data);
 
   // Save the current scope so we can reset it later.
-  $current_scope: __scope-activate($scope_name);
+  $current_scope: scope-activate($scope_name);
 
   // If there's no media query, simply print the content.
   $query: scope-media-query-get();

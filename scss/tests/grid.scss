@@ -38,17 +38,17 @@
 
 
 
-    @debug grid-parse((count: 10, width: 1000px, column: 91px));
-    @debug grid-parse((count: 10, width: 1000px, gutter: 10px));
-    @debug grid-parse((count: 10, column: 91px, gutter: 10px));
-    @debug grid-parse((count: 10, column: 9.1%));
-    @debug grid-parse((count: 10, gutter: 1%));
-    @debug grid-parse((column: 9.1%, gutter: 1%));
-
-    @debug grid-parse((count: 10, gutter: 10px, column: 91px), FIXED);
-    @debug grid-parse((width: 1000px, gutter: 10px, column: 91px), FIXED);
-    @debug grid-parse((width: 1000px, count: 10, gutter: 10px), FIXED);
-    @debug grid-parse((width: 1000px, count: 10, column: 91px), FIXED);
+    // @debug grid-parse((count: 10, width: 1000px, column: 91px));
+    // @debug grid-parse((count: 10, width: 1000px, gutter: 10px));
+    // @debug grid-parse((count: 10, column: 91px, gutter: 10px));
+    // @debug grid-parse((count: 10, column: 9.1%));
+    // @debug grid-parse((count: 10, gutter: 1%));
+    // @debug grid-parse((column: 9.1%, gutter: 1%));
+    //
+    // @debug grid-parse((count: 10, gutter: 10px, column: 91px), FIXED);
+    // @debug grid-parse((width: 1000px, gutter: 10px, column: 91px), FIXED);
+    // @debug grid-parse((width: 1000px, count: 10, gutter: 10px), FIXED);
+    // @debug grid-parse((width: 1000px, count: 10, column: 91px), FIXED);
 
     $nop: grid-setup((count: 10, gutter: 1%));
     // @debug grid-gutter();
@@ -61,6 +61,12 @@
     //   1%,
     //   "Grid gutter"
     // );
+
+    @include scope() {
+      body {
+        width: 10px;
+      }
+    }
 
     $tmp: false;
     @if ($tmp) {

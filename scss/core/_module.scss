@@ -1,11 +1,54 @@
-/// Register a module "on" an event.
-@function scope-module-on($on, $module_name) {
-  @return __scope-trigger-add($on, scope- + $module_name + -$on);
+/// Add a function to a trigger.
+///
+/// @param {String} $trigger_name
+///   Name of the trigger.
+/// @param {String} $function
+///   Name of the function to call.
+///
+/// @return {String}
+///   The function name
+@function scope-module-on($trigger_name, $module_name) {
+  $function: scope- + $module_name + -$trigger_name;
+
+  $triggers: map-get($__scope_triggers, $trigger_name);
+
+  @if ($triggers == null) {
+    $triggers: ($function);
+  }
+  @else {
+    $triggers: append($triggers, $function, comma);
+  }
+
+  $__scope_triggers: __map-set($__scope_triggers, $trigger_name, $triggers) !global;
+
+  @return $function;
 }
 
-/// Trigger an event.
-@function scope-module-trigger($trigger, $data: ()) {
-  @return __scope-trigger($trigger, $data);
+/// Trigger all the functions in a trigger.
+///
+/// @param {String} $trigger_name
+///   Name of the trigger.
+/// @param {Arguments} $args...
+///   Data to pass through to the called functions.
+///
+/// @return {Boolean}
+///   The combined result of the calls
+@function scope-module-trigger($trigger_name, $args...) {
+  $triggers: map-get($__scope_triggers, $trigger_name);
+
+  @if ($triggers == null) {
+    $triggers: ();
+  }
+
+  $result: true;
+
+  @each $trigger in $triggers {
+    @if (function_exists($trigger)) {
+      $result: $result and call($trigger, $args...);
+    }
+  }
+
+  @return $result;
 }
 
 /// Set module data.
@@ -53,23 +96,18 @@
   $value: map-get($variables, $key);
 
   //
-  @if ($value == null) {
-    $value: nth($default_value, 1);
+  @if ($value == null and $default_value != null) {
 
-    // TODO use the __has_flag() function, this way we can provide a second
-    //      value that will be used as default if there's no fallback.
-    @if ($value == USE_FALLBACK) {
+    @if (nth($default_value, 1) == USE_FALLBACK) {
       $fallback_scope: scope-settings-get(fallback, $scope_name);
 
-      @if ($fallback_scope == null) {
-        @if (length($default_value) == 1) {
-          $value: null;
-        } @else {
+      @if ($fallback_scope == false) {
+        @if (length($default_value) == 2) {
           $value: nth($default_value, 2);
         }
       }
       @else {
-        $value: scope-variable-get($key, $default_value, $fallback_scope);
+        $value: scope-module-get-variable($module_name, $key, $default_value, $fallback_scope);
       }
     }
   }

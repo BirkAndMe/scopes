@@ -30,6 +30,16 @@
       scope-variable-get('inall', USE_FALLBACK, last), 'last',
       "Get variable with a value and a fallback value."
     );
+
+    @include assert-equal(
+      scope-variable-get('innone', USE_FALLBACK, last), null,
+      "Returned something when it should've been null."
+    );
+
+    @include assert-equal(
+      scope-variable-get('innone', USE_FALLBACK 'extra default', last), 'extra default',
+      "Extra default value."
+    );
   }
 
 
