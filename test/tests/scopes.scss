@@ -1,6 +1,4 @@
-@import 'true/true';
-
-@import '../scopes';
+@import 'base';
 
 @include test-module('scopes') {
   @include test('scope-create') {

@@ -1,6 +1,4 @@
-@import 'true/true';
-
-@import '../scopes';
+@import 'base';
 
 @include test-module('variable') {
 
@@ -12,32 +10,32 @@
 
   @include test('scope-variables-get') {
     @include assert-equal(
-      scope-variable-get('varindefault'), 'something',
+      vget('varindefault'), 'something',
       "Variable created during scope-create initialization."
     );
 
     @include assert-equal(
-      scope-variable-get('varindefault', USE_FALLBACK, second), 'something',
+      vget('varindefault', USE_FALLBACK, second), 'something',
       "Fallback 1 level"
     );
 
     @include assert-equal(
-      scope-variable-get('varindefault', USE_FALLBACK, last), 'something',
+      vget('varindefault', USE_FALLBACK, last), 'something',
       "Fallback 2 levels"
     );
 
     @include assert-equal(
-      scope-variable-get('inall', USE_FALLBACK, last), 'last',
+      vget('inall', USE_FALLBACK, last), 'last',
       "Get variable with a value and a fallback value."
     );
 
     @include assert-equal(
-      scope-variable-get('innone', USE_FALLBACK, last), null,
+      vget('innone', USE_FALLBACK, last), null,
       "Returned something when it should've been null."
     );
 
     @include assert-equal(
-      scope-variable-get('innone', USE_FALLBACK 'extra default', last), 'extra default',
+      vget('innone', USE_FALLBACK 'extra default', last), 'extra default',
       "Extra default value."
     );
   }
@@ -45,12 +43,12 @@
 
   @include test('scope-variables-set') {
     @include assert-equal(
-      scope-variable-set('asd', dsa), dsa,
+      vset('asd', dsa), dsa,
       "Set a value."
     );
 
     @include assert-equal(
-      scope-variable-get('asd'), 'dsa',
+      vget('asd'), 'dsa',
       "Is the value set actually set."
     );
   }

@@ -1,0 +1,23 @@
+@import 'base';
+
+.container {
+  max-width: vget(site-max-width);
+}
+
+.box {
+  @include grid(3);
+
+  background-color: vget(box-color);
+  border: vget(box-border);
+
+  @include scope(normal) {
+    @include grid(4, LIST);
+
+    background-color: vget(box-color);
+    border: vget(box-border);
+  }
+
+  @include scope(tiny) {
+    @include grid(1, LIST);
+  }
+}

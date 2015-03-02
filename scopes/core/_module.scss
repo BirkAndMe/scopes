@@ -1,3 +1,9 @@
+///
+$__scope_modules: ();
+
+///
+$__scope_triggers: ();
+
 /// Add a function to a trigger.
 ///
 /// @param {String} $trigger_name
@@ -29,7 +35,7 @@
 /// @param {String} $trigger_name
 ///   Name of the trigger.
 /// @param {Arguments} $args...
-///   Data to pass through to the called functions.
+///   Arguments passed onto the triggered functions.
 ///
 /// @return {Boolean}
 ///   The combined result of the calls
@@ -52,6 +58,16 @@
 }
 
 /// Set module data.
+///
+/// @param {String} $module_name
+///   Name of the module.
+/// @param {Map} $module
+///   The module data to save.
+/// @param {String} $scope_name ($__scope)
+///   Name of the scope.
+///
+/// @return {Map}
+///   The module data.
 @function scope-module-set($module_name, $module: (), $scope_name: $__scope) {
   //
   $scope: __scope-get($scope_name);
@@ -66,6 +82,14 @@
 }
 
 /// Get the module data.
+///
+/// @param {String} $module_name
+///   Name of the module.
+/// @param {String} $scope_name ($__scope)
+///   Name of the scope.
+///
+/// @return {Map}
+///   The module data.
 @function scope-module-get($module_name, $scope_name: $__scope) {
   //
   $scope: __scope-get($scope_name);
@@ -80,6 +104,18 @@
 }
 
 /// Set a single module variable.
+///
+/// @param {String} $module_name
+///   Name of the module.
+/// @param {String} $key
+///   Name of the variable to set.
+/// @param {mixed} $value
+///   The value to put into the variable.
+/// @param {String} $scope_name ($__scope)
+///   Name of the scope.
+///
+/// @return {mixed}
+///   The value.
 @function scope-module-set-variable($module_name, $key, $value, $scope_name: $__scope) {
   $variables: scope-module-get($module_name, $scope_name);
   $variables: __map-set($variables, $key, $value);
@@ -90,6 +126,18 @@
 }
 
 /// Get a single module variable.
+///
+/// @param {String} $module_name
+///   Name of the module.
+/// @param {String} $key
+///   Name of the variable to get.
+/// @param {mixed} $default_value
+///   The value returned if the current scope doesn't have that key.
+/// @param {String} $scope_name ($__scope)
+///   Name of the scope.
+///
+/// @return {mixed}
+///   The value.
 @function scope-module-get-variable($module_name, $key, $default_value: null, $scope_name: $__scope) {
   $variables: scope-module-get($module_name, $scope_name);
 
@@ -97,7 +145,6 @@
 
   //
   @if ($value == null and $default_value != null) {
-
     @if (nth($default_value, 1) == USE_FALLBACK) {
       $fallback_scope: scope-settings-get(fallback, $scope_name);
 
@@ -109,6 +156,9 @@
       @else {
         $value: scope-module-get-variable($module_name, $key, $default_value, $fallback_scope);
       }
+    }
+    @else {
+      $value: $default_value;
     }
   }
 

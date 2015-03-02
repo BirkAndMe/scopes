@@ -1,3 +1,48 @@
+//
+$__scope_default: default !default;
+
+//
+$__scope: $__scope_default !default;
+
+
+//
+$__scopes: ();
+
+
+/// Get a scope.
+///
+/// @param {String} $scope_name ($__scope)
+///   Name of the scope.
+///
+/// @return {Map}
+///   The complete scope map.
+@function __scope-get($scope_name: $__scope, $data: ()) {
+  $scope: map-get($__scopes, $scope_name);
+
+  @if ($scope == null) {
+    $scope_name: scope-create($scope_name, $data);
+    $scope: __scope-get($scope_name);
+  }
+
+  @return $scope;
+}
+
+/// Set scope data.
+///
+/// @param {Map} $scope
+///   The actual scope data.
+/// @param {String} $scope_name ($__scope)
+///   Name of the scope.
+///
+/// @return {Map}
+///   The complete scope map.
+
+@function __scope-set($scope, $scope_name: $__scope) {
+  $__scopes: __map-set($__scopes, $scope_name, $scope) !global;
+  @return $scope;
+}
+
+
 ///
 @function scope-activate($scope_name) {
   $current_scope: $__scope;
@@ -23,21 +68,21 @@
 ///
 /// @example scss - With a media query
 ///   $scope_name: scope-create(myscope, (query: 'min'));
-@function scope-create($scope_name: $__scope_default, $data: ()) {
+@function scope-create($scope_name: $__scope_default, $settings: ()) {
   @if (type-of($scope_name) == map) {
-    $data: $scope_name;
+    $settings: $scope_name;
     $scope_name: $__scope_default;
   }
 
   // Set the scope_name as part of the data
-  $data: __map-set($data, scope_name, $scope_name);
+  $settings: __map-set($settings, scope_name, $scope_name);
 
   // __scope-set() will automatically create the scope if it doesn't exist.
-  $nop: __scope-set($data, $scope_name);
+  $nop: __scope-set((settings: $settings), $scope_name);
 
   // Trigger the SCOPE_CREATE event. Allowing modules to do something everytime
   // a new scope is created.
-  $nop: scope-module-trigger(SCOPE_CREATE, $data);
+  $nop: scope-module-trigger(SCOPE_CREATE, $settings);
 
   @return $scope_name;
 }
@@ -57,7 +102,7 @@
   $current_scope: scope-activate($scope_name);
 
   // If there's no media query, simply print the content.
-  $query: scope-media-query-get();
+  $query: scope-settings-get(query);
   @if ($query == false) {
     @content;
   }
@@ -67,5 +112,5 @@
   }
 
   // Reset the scope.
-  $nop: __scope-activate($current_scope);
+  $nop: scope-activate($current_scope);
 }

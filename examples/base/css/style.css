@@ -1,0 +1,29 @@
+.container {
+  max-width: 1600px; }
+
+.box {
+  width: 24.25%;
+  margin-right: 1%;
+  float: left;
+  background-color: #f00;
+  border: 5px solid #0f0; }
+  @media (max-width: 1280px) {
+    .box {
+      width: 32%;
+      margin-right: 2%;
+      float: left;
+      background-color: #f00;
+      border: 0 none; }
+      .box:nth-child(3n) {
+        margin-right: 0; }
+      .box:nth-child(3n+1) {
+        clear: left; } }
+  @media (max-width: 400px) {
+    .box {
+      width: 47.5%;
+      margin-right: 5%;
+      float: left; }
+      .box:nth-child(2n) {
+        margin-right: 0; }
+      .box:nth-child(2n+1) {
+        clear: left; } }
