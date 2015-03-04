@@ -1,0 +1,32 @@
+@import 'base';
+
+body {
+  font-family: sans-serif;
+}
+
+.container {
+  @include grid-container();
+  margin: 0 auto;
+
+  @include scope(smaller) {
+    @include grid-container();
+  }
+}
+
+.list-item {
+  @include grid(3, LIST);
+  margin-bottom: grid-gutter();
+  padding: grid-gutter();
+
+  background-color: #999;
+  border-radius: 5px;
+  box-sizing: border-box;
+
+  @include scope(smaller) {
+    @include grid-reset-list(3);
+    @include grid(4, LIST);
+
+    margin-bottom: grid-gutter();
+    padding: grid-gutter();
+  }
+}

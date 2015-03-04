@@ -7,6 +7,12 @@ $__scope_grid_gutter: 1%;
 /// Current columnn width.
 $__scope_grid_column: 9.1%;
 
+/// Current columnn width.
+$__scope_grid_width: 0;
+
+/// Current columnn width.
+$__scope_grid_maxwidth: 0;
+
 /// On SCOPE_CREATE.
 @function scope-grid-SCOPE_ACTIVATE($current_scope, $new_scope) {
   $nop: scope-grid-set-globals($new_scope);
@@ -26,6 +32,14 @@ $nop: scope-module-on(SCOPE_ACTIVATE, 'grid');
 
   $__scope_grid_column: scope-module-get-variable(grid,
     column,
+    USE_FALLBACK, $scope_name) !global;
+
+  $__scope_grid_width: scope-module-get-variable(grid,
+    width,
+    USE_FALLBACK, $scope_name) !global;
+
+  $__scope_grid_maxwidth: scope-module-get-variable(grid,
+    maxwidth,
     USE_FALLBACK, $scope_name) !global;
 
   @return $scope_name;
@@ -58,11 +72,6 @@ $nop: scope-module-on(SCOPE_ACTIVATE, 'grid');
 }
 
 ///
-@function grid-total-width($count, $gutter, $column) {
-  @return grid-width($count, $count, $count, $gutter, $column);
-}
-
-///
 @function grid-parse($data, $layout: FLUID) {
   // TODO: Clean up this function. It works but it seems like a lot of mess.
   //       There must be a more clever way of parsing the data.
@@ -71,6 +80,7 @@ $nop: scope-module-on(SCOPE_ACTIVATE, 'grid');
   $gutter: map-get($data, 'gutter');
   $column: map-get($data, 'column');
   $width: map-get($data, 'width');
+  $maxwidth: map-get($data, 'maxwidth');
 
   @if ($layout == FIXED) {
     @if (length($data) < 3) {
@@ -129,7 +139,15 @@ $nop: scope-module-on(SCOPE_ACTIVATE, 'grid');
     $column: $width * ($column / 100%);
   }
 
-  @return (count: $count, gutter: $gutter, column: $column);
+  @if ($width == null) {
+    $width: grid-width($count, $count, $count, $gutter, $column);
+  }
+
+  @if ($maxwidth == null) {
+    $maxwidth: 100%;
+  }
+
+  @return (count: $count, gutter: $gutter, column: $column, width: $width, maxwidth: $maxwidth);
 }
 
 ///
@@ -146,14 +164,31 @@ $nop: scope-module-on(SCOPE_ACTIVATE, 'grid');
   &:nth-child(#{$delta}n+1) { clear: left; }
 }
 
-///
-@mixin grid($info: $columns of $container, $flags: ()) {
-  $columns: nth($info, 1);
-  $container: $__scope_grid_count;
+@mixin grid-reset-wrap($delta, $container) {
+  &:nth-child(#{$delta}n) { margin-right: grid-gutter($container); }
+	&:nth-child(#{$delta}n+1) { clear: none }
+}
 
+@mixin grid-reset-list($info: $columns of $container, $scope_container: $__scope_grid_count) {
+  $columns: nth($info, 1);
+  $container: scope-grid-parse-info($info);
+
+  @include grid-reset-wrap($container / $columns, $scope_container);
+
+}
+
+@function scope-grid-parse-info($info) {
+  $container: $__scope_grid_count;
   @if (length($info) > 1) {
     $container: nth($info, 3);
   }
+  @return $container;
+}
+
+///
+@mixin grid($info: $columns of $container, $flags: ()) {
+  $columns: nth($info, 1);
+  $container: scope-grid-parse-info($info);
 
   width: grid-width($columns, $container);
 
@@ -168,4 +203,9 @@ $nop: scope-module-on(SCOPE_ACTIVATE, 'grid');
   @if (__has_flag($flags, LIST)) {
     @include grid-wrap($container / $columns);
   }
+}
+
+@mixin grid-container() {
+  max-width: $__scope_grid_maxwidth;
+  width: $__scope_grid_width;
 }
