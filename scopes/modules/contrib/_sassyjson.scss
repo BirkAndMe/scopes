@@ -1,0 +1,108 @@
+// A scrabed version oof sassyjson
+// https://github.com/HugoGiraudel/SassyJSON
+
+// Proof quote a value
+// --------------------------------------------------------------------------------
+// @param $value: value to be quoted
+// --------------------------------------------------------------------------------
+// @return [string] quoted value
+
+@function _proof-quote($value) {
+  @return '"' + $value + '"';
+}
+
+// Encode a bool to JSON
+// --------------------------------------------------------------------------------
+// @param $bool: bool to be encoded
+// --------------------------------------------------------------------------------
+// @return [bool] boolean
+
+@function _json-encode--bool($boolean) {
+  @return $boolean;
+}
+
+// Encode a color to JSON
+// --------------------------------------------------------------------------------
+// @param $color: color to be encoded
+// --------------------------------------------------------------------------------
+// @return [string] encoded color
+
+@function _json-encode--color($color) {
+  @return _proof-quote($color);
+}
+
+// Encode a list to JSON
+// --------------------------------------------------------------------------------
+// @param $list: list to be encoded
+// --------------------------------------------------------------------------------
+// @return [string] encoded list
+
+@function _json-encode--list($list) {
+  $str: "";
+  @each $item in $list {
+    $str: $str + ', ' + json-encode($item);
+  }
+  @return '[' + str-slice($str, 3) + ']';
+}
+
+// Encode a map to JSON
+// --------------------------------------------------------------------------------
+// @param $map: map to be encoded
+// --------------------------------------------------------------------------------
+// @return [string] encoded map
+
+@function _json-encode--map($map) {
+  $str: "";
+  @each $key, $value in $map {
+    $str: $str + ', ' + _proof-quote($key) + ': ' + json-encode($value);
+  }
+  @return '{' + str-slice($str, 3) + '}';
+}
+
+// Encode a number to JSON
+// --------------------------------------------------------------------------------
+// @param $number: number to be encoded
+// --------------------------------------------------------------------------------
+// @return [string] encoded number
+
+@function _json-encode--number($number) {
+  @return if(unitless($number), $number, _proof-quote($number));
+}
+
+// Encode a string to JSON
+// --------------------------------------------------------------------------------
+// @param $string: string to be encoded
+// --------------------------------------------------------------------------------
+// @return [string] encoded string
+
+@function _json-encode--string($string) {
+  @return _proof-quote($string);
+}
+
+// Encode `null` to JSON
+// --------------------------------------------------------------------------------
+// @param $null: `null`
+// --------------------------------------------------------------------------------
+// @return [string] `null`
+
+@function _json-encode--null($null) {
+  @return "null";
+}
+
+// Delay the encoding of ta literal to JSON
+// to a type-specific method
+// --------------------------------------------------------------------------------
+// @param $value: value to be stringified
+// --------------------------------------------------------------------------------
+// @throw "Unknown type for $value ( {x} )."
+// --------------------------------------------------------------------------------
+// @return [string|false] JSON encoded string
+
+@function json-encode($value) {
+  $type: type-of($value);
+  @if function_exists('_json-encode--#{$type}') {
+    @return call('_json-encode--#{$type}', $value);
+  }
+  @warn "Unknown type for #{$value} (#{$type}).";
+  @return false;
+}

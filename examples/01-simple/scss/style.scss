@@ -5,27 +5,42 @@ body {
 }
 
 .container {
-  @include grid-container();
-  margin: 0 auto;
+  // Using the ALL_SCOPES flag, will add the container mixin to all other
+  // scopes.
+  @include grid-container(ALL_SCOPES);
 
-  @include scope(smaller) {
-    @include grid-container();
-  }
+  margin: 0 auto;
 }
 
+// This is a simple list item.
 .list-item {
+  // The element should fill 3 columns.
+  // And using the LIST flag automatically "wraps" the item, meaning it clears
+  // every nth-child(4n+1). (See the compiled style.css)
   @include grid(3, LIST);
+
+  // Using the grid-gutter() will allow the bottom margin, to follow the gutter
+  // of the grid.
   margin-bottom: grid-gutter();
+  // Same goes for the padding.
   padding: grid-gutter();
 
   background-color: #999;
   border-radius: 5px;
   box-sizing: border-box;
 
+  // Now open up our "smaller" scope.
   @include scope(smaller) {
-    @include grid-reset-list(3);
+    // On the smaller screen we want the list items to fill 4 columns instead
+    // of only 3.
     @include grid(4, LIST);
+    // This means we need to reset the wrapping. The grid-reset-list() mixin
+    // will reset any previous list that is X (3 in this case) columns.
+    @include grid-reset-list(3);
 
+    // Because the grid changes values in this scope, we need to re-apply the
+    // grid-gutter() to both margin and padding.
+    // Alternatively one could use the scope-all() mixin.
     margin-bottom: grid-gutter();
     padding: grid-gutter();
   }

@@ -2,12 +2,11 @@ body {
   font-family: sans-serif; }
 
 .container {
-  max-width: 1140px;
   width: 95%;
+  max-width: 1140px;
   margin: 0 auto; }
   @media (max-width: 1024px) {
     .container {
-      max-width: 100%;
       width: 98%; } }
 
 .list-item {
@@ -30,11 +29,11 @@ body {
       float: left;
       margin-bottom: 2%;
       padding: 2%; }
-      .list-item:nth-child(4n) {
-        margin-right: 2%; }
-      .list-item:nth-child(4n+1) {
-        clear: none; }
       .list-item:nth-child(3n) {
         margin-right: 0; }
       .list-item:nth-child(3n+1) {
-        clear: left; } }
+        clear: left; }
+      .list-item:nth-child(4n) {
+        margin-right: 2%; }
+      .list-item:nth-child(4n+1) {
+        clear: none; } }

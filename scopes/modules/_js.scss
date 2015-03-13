@@ -1,0 +1,22 @@
+@import 'contrib/sassyjson';
+
+@mixin scope-js() {
+  $json: json-encode(scope-module-trigger(SCOPE_JS_GET));
+  /*! scope-js: '#{$json}' */
+
+  .scope-scope {
+    position: absolute;
+    display: none;
+  }
+
+  @include scope-all() {
+    #scope-#{$__scope} {
+      top: 1px;
+    }
+  }
+}
+
+@function scope-js-SCOPE_JS_GET() {
+  @return scope-get-scopes();
+}
+$nop: scope-module-on(SCOPE_JS_GET, 'js');

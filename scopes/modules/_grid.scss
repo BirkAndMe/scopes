@@ -1,26 +1,44 @@
 /// Ccurrent column count.
-$__scope_grid_count: 10;
+$__scope_grid_count: null;
 
 /// Current gutter width.
-$__scope_grid_gutter: 1%;
+$__scope_grid_gutter: null;
 
 /// Current columnn width.
-$__scope_grid_column: 9.1%;
+$__scope_grid_column: null;
 
 /// Current columnn width.
-$__scope_grid_width: 0;
+$__scope_grid_width: null;
 
 /// Current columnn width.
-$__scope_grid_maxwidth: 0;
+$__scope_grid_maxwidth: null;
 
-/// On SCOPE_CREATE.
+/// Set the global grid variables on scope activate.
 @function scope-grid-SCOPE_ACTIVATE($current_scope, $new_scope) {
   $nop: scope-grid-set-globals($new_scope);
   @return true;
 }
 $nop: scope-module-on(SCOPE_ACTIVATE, 'grid');
 
+@function scope-grid-SCOPE_JS_GET() {
+  $grids: ();
+  @each $scope in scope-get-scopes() {
+    $grids: __map-set($grids, $scope, scope-grid-set-globals($scope));
+  }
+
+  $nop: scope-grid-set-globals();
+
+  @return $grids;
+}
+$nop: scope-module-on(SCOPE_JS_GET, 'grid');
+
+/// Set the global grid variables.
 ///
+/// @param {String} $scope_name ($__scope)
+///   Name of the scope.
+///
+/// @return {String}
+///   Scope name.
 @function scope-grid-set-globals($scope_name: $__scope) {
   $__scope_grid_count: scope-module-get-variable(grid,
     count,
@@ -36,26 +54,51 @@ $nop: scope-module-on(SCOPE_ACTIVATE, 'grid');
 
   $__scope_grid_width: scope-module-get-variable(grid,
     width,
-    USE_FALLBACK, $scope_name) !global;
+    null, $scope_name) !global;
 
   $__scope_grid_maxwidth: scope-module-get-variable(grid,
     maxwidth,
-    USE_FALLBACK, $scope_name) !global;
+    null, $scope_name) !global;
 
-  @return $scope_name;
+  @return (count: $__scope_grid_count, gutter: $__scope_grid_gutter, column: $__scope_grid_column, width: $__scope_grid_width, maxwidth: $__scope_grid_maxwidth);
 }
 
+/// Get the grid gutter width.
 ///
+/// @param {Integer} $container ($__scope_grid_count)
+///   Count of columns in the current container.
+/// @param {Integer} $count ($__scope_grid_count)
+///   Total grid count.
+/// @param {Number} $gutter ($__scope_grid_gutter)
+///   Total grid gutter.
 @function grid-gutter($container: $__scope_grid_count, $count: $__scope_grid_count, $gutter: $__scope_grid_gutter) {
   @return ($count / $container) * $gutter;
 }
 
+/// Get the grid column width.
 ///
+/// @param {Integer} $container ($__scope_grid_count)
+///   Count of columns in the current container.
+/// @param {Integer} $count ($__scope_grid_count)
+///   Total grid count.
+/// @param {Number} $column ($__scope_grid_column)
+///   Total grid column.
 @function grid-column($container: $__scope_grid_count, $count: $__scope_grid_count, $column: $__scope_grid_column) {
   @return ($count / $container) * $column;
 }
 
+/// Get the width of X columns.
 ///
+/// @param {Integer} $columns
+///   Number of columns to get the width of.
+/// @param {Integer} $container ($__scope_grid_count)
+///   Count of columns in the current container.
+/// @param {Integer} $count ($__scope_grid_count)
+///   Total grid count.
+/// @param {Number} $gutter ($__scope_grid_gutter)
+///   Total grid gutter.
+/// @param {Number} $column ($__scope_grid_column)
+///   Total grid column.
 @function grid-width($columns, $container: $__scope_grid_count, $count: $__scope_grid_count, $gutter: $__scope_grid_gutter, $column: $__scope_grid_column) {
   $gutter: grid-gutter($container, $count, $gutter);
   $column: grid-column($container, $count, $column);
@@ -63,7 +106,21 @@ $nop: scope-module-on(SCOPE_ACTIVATE, 'grid');
   @return $column * $columns + $gutter * ($columns - 1);
 }
 
+/// Get the "grid value" of X columns.
 ///
+/// The "grid value" is the start position of a column, or in other words
+/// grid-width(X) + grid-gutter(1).
+///
+/// @param {Integer} $columns
+///   Number of columns to get the width of.
+/// @param {Integer} $container ($__scope_grid_count)
+///   Count of columns in the current container.
+/// @param {Integer} $count ($__scope_grid_count)
+///   Total grid count.
+/// @param {Number} $gutter ($__scope_grid_gutter)
+///   Total grid gutter.
+/// @param {Number} $column ($__scope_grid_column)
+///   Total grid column.
 @function grid-value($columns, $container: $__scope_grid_count, $count: $__scope_grid_count, $gutter: $__scope_grid_gutter, $column: $__scope_grid_column) {
   $gutter: grid-gutter($container, $count, $gutter);
   $column: grid-column($container, $count, $column);
@@ -139,12 +196,8 @@ $nop: scope-module-on(SCOPE_ACTIVATE, 'grid');
     $column: $width * ($column / 100%);
   }
 
-  @if ($width == null) {
+  @if ($width == AUTO) {
     $width: grid-width($count, $count, $count, $gutter, $column);
-  }
-
-  @if ($maxwidth == null) {
-    $maxwidth: 100%;
   }
 
   @return (count: $count, gutter: $gutter, column: $column, width: $width, maxwidth: $maxwidth);
@@ -154,6 +207,8 @@ $nop: scope-module-on(SCOPE_ACTIVATE, 'grid');
 @function grid-setup($data, $layout: FLUID, $scope_name: $__scope) {
   @return scope-module-set(grid, grid-parse($data, $layout), $scope_name);
 }
+
+///
 @mixin grid-setup($data, $layout: FLUID, $scope_name: $__scope) {
   $nop: grid-setup($data, $layout, $scope_name);
 }
@@ -205,7 +260,18 @@ $nop: scope-module-on(SCOPE_ACTIVATE, 'grid');
   }
 }
 
-@mixin grid-container() {
-  max-width: $__scope_grid_maxwidth;
-  width: $__scope_grid_width;
+///
+@mixin grid-container($flags: ()) {
+  @if ($__scope_grid_width != null) {
+    width: $__scope_grid_width;
+  }
+  @if ($__scope_grid_maxwidth != null) {
+    max-width: $__scope_grid_maxwidth;
+  }
+
+  @if (__has_flag($flags, ALL_SCOPES)) {
+    @include scope-all(ONLY_QUERY) {
+      @include grid-container();
+    }
+  }
 }

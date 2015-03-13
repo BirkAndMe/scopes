@@ -1,0 +1,14 @@
+@import 'scopes';
+
+@import 'modules/js';
+@import 'modules/grid';
+
+@include scope(one) {
+  $nop: grid-setup((count: 10, gutter: 5%));
+}
+@include scope(two, (query: 'max-width: 1024px')) {
+}
+@include scope(three, (query: 'max-width: 600px')) {
+}
+
+@include scope-js();
