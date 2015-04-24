@@ -1,0 +1,15 @@
+@import 'base';
+
+// Enable the debugging.
+@include scope-debug();
+
+// We need to manually center the '.scopes-debug-grid .grid-container', to fit
+// into our current layout.
+.scopes-debug-grid {
+  .grid-container {
+    margin: 0 auto;
+  }
+}
+
+// The debugging features wont work without also enabling javascript.
+@include scope-js();

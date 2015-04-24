@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>JavaScript</title>
+
+  <meta charset="utf-8">
+
+  <link type="text/css" rel="stylesheet" href="css/style.css" />
+  <link type="text/css" rel="stylesheet" href="css/javascript.css" />
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js"></script>
+
+  <link type="text/css" rel="stylesheet" href="../_base/exstyle.css" />
+  <script src="../_base/exstyle.js"></script>
+
+  <script src="../../js/scopes.js"></script>
+
+  <script src="example.js"></script>
+</head>
+<body>
+  <div class="container">
+    <h1>Scopes JavaScript</h1>
+    <p>The Scopes JavaScript will give a couple of tools, which makes it easier to transition between breakpoints in your JavaScript.</p>
+
+    <input type="button" onClick="showActiveScopes()" value="Show active scopes" />
+    <pre id="jsout"></pre>
+
+    <h2>Enabling JS</h2>
+    <p>Enabling the Scopes JavaScirpt HTML side is done by simply including the <code>[PATH]/scopes/js/scopes.js</code> on your page.</p>
+    <pre class="prettyprint lang-js">&lt;script src="js/scopes.js"&gt;&lt;/script&gt;</pre>
+    <p>To enable the JavaScript on the scss side of things, you need to include the <code>scope-js</code> mixin.<br/>
+But it's important to only include it once, and after you've initiated all your scopes.<br/>
+In this example I've dedicated a scss file to this (javascript.scss).</p>
+    <pre class="prettyprint lang-scss loadcode linenums">scss/javascript.scss</pre>
+    <p>Outputs:</p>
+    <pre class="prettyprint lang-css loadcode linenums">css/javascript.css</pre>
+
+    <h2>Using the API</h2>
+    <p>Check the <code>example.js</code> in the example</p>
+    <pre class="prettyprint lang-js loadcode linenums">example.js</pre>
+  </div>
+</html>

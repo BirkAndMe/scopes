@@ -2,13 +2,14 @@
 
 @include test-module('variable') {
 
+  // REWRITE THESE
+
   // Create 3 scopes
   $nop: scope-create((variables: (varindefault: 'something', inall: 'first')));
   $nop: scope-create(second, (settings: (fallback: $nop), variables: (inall: 'second')));
   $nop: scope-create(last, (settings: (fallback: second), variables: (inall: 'last')));
 
-
-  @include test('scope-variables-get') {
+  @include test('vget') {
     @include assert-equal(
       vget('varindefault'), 'something',
       "Variable created during scope-create initialization."

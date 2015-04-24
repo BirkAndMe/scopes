@@ -1,3 +1,7 @@
+////
+/// @group core/scope
+////
+
 ///
 $__scope_default: default !default;
 
@@ -99,7 +103,7 @@ $__scopes: ();
 ///
 /// If the scope doesn't exist it will automatically be created.
 ///
-/// @param {String} $scope_name ($__scope_default)
+/// @param {String} $scope_name [$__scope_default]
 ///   Name of the scope.
 /// @param {Map} $data (())
 ///   Scope configurations.
@@ -144,11 +148,16 @@ $__scopes: ();
 /// Insert the content wrapped inside all scopes, using their respected values
 /// and media-queries.
 ///
-/// @param {List} $flags ((())
+/// @param {List} $flags [()]
 ///   ONLY_QUERY: Only use scopes that has a media-query.
-@mixin scope-all($flags: ()) {
+/// @param {String} $exclude ['']
+///   ONLY_QUERY: Only use scopes that has a media-query.
+@mixin scope-all($flags: (), $exclude: '') {
   @each $scope in scope-get-scopes() {
-    @if (not __has_flag($flags, ONLY_QUERY) or scope-settings-get(query, $scope) != false) {
+    @if (
+      not __has_flag($flags, ONLY_QUERY) or scope-settings-get(query, $scope) != false
+      and not __has_flag(scope-settings-get(exclude_all_scopes, $scope), $exclude)
+    ) {
       @include scope($scope) {
         @content;
       }

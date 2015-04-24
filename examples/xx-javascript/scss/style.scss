@@ -1,0 +1,33 @@
+@import 'base';
+
+.container {
+  @include grid-container(ALL_SCOPES);
+
+  margin: 0 auto;
+}
+
+#jsout {
+  transition: all 500ms;
+  padding: 10px;
+  background-color: #eee;
+
+  &.ping {
+    transition: all 100ms;
+    background-color: #999;
+    box-shadow: 0px 0px 0px 2px #333;
+    color: #333;
+  }
+
+  .label {
+    font-weight: bold;
+  }
+
+  a {
+    color: #666;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}

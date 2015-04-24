@@ -1,3 +1,7 @@
+////
+/// @group core/module
+////
+
 ///
 $__scope_modules: ();
 
@@ -50,8 +54,8 @@ $__scope_triggers: ();
 
   @each $trigger in $triggers {
     // @debug $trigger;
-    @if (function_exists(nth($trigger, 2))) {
       // $result: $result and call($trigger, $args...);
+    @if (function-exists(nth($trigger, 2))) {
       // $result: append($result, call($trigger, $args...));
       // @debug $trigger;
       $result: __map-set($result, nth($trigger, 1), call(nth($trigger, 2), $args...));

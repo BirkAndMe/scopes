@@ -1,11 +1,17 @@
 ////
-/// @group Settings
+/// @group core/settings
 ////
 
-/// Default settings
+/// Default settings.
+///
+/// By overriding this map any newly created scope will inherit these default
+/// settings, unless anything else is set when creating the scope.
+///
+/// @type map
 $scope_settings_default: () !default;
 
-/// On SCOPE_CREATE.
+///
+/// @name TRIGGER - Scope Create
 @function scope-settings-SCOPE_CREATE($settings: ()) {
   $settings: map-merge($scope_settings_default, $settings);
 
@@ -15,6 +21,12 @@ $scope_settings_default: () !default;
 $nop: scope-module-on(SCOPE_CREATE, 'settings');
 
 /// Get a scope setting.
+/// @param $setting {String}
+///   The setting (key) you need.
+/// @param {String} $scope_name [$__scope]
+///   Name of the scope.
+/// @return {mixed}
+///   The setting value.
 @function scope-settings-get($setting, $scope_name: $__scope) {
   @return scope-module-get-variable(settings, $setting, false, $scope_name);
 }
@@ -23,7 +35,7 @@ $nop: scope-module-on(SCOPE_CREATE, 'settings');
 @function scope-settings-set($setting, $value, $scope_name: $__scope) {
   @return scope-module-set-variable(settings, $setting, $value, $scope_name);
 }
-/// @alias scope-settings-set()
+/// @alias scope-settings-set
 @mixin scope-settings-set($setting, $value: '') { $nop: scope-settings-set($setting, $value); }
 
 ///

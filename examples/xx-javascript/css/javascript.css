@@ -1,0 +1,14 @@
+body:after {
+  display: none;
+  content: '{"default": {"grid": {"count": 12, "gutter": "1%", "column": "7.41667%", "width": "95%", "maxwidth": "1140px"}}, "smaller": {"grid": {"count": 12, "gutter": "2%", "column": "6.5%", "width": "98%", "maxwidth": null}}}'; }
+
+.scope-scope {
+  position: absolute;
+  display: none; }
+
+#scope-default {
+  top: 1px; }
+
+@media (max-width: 1024px) {
+  #scope-smaller {
+    top: 1px; } }

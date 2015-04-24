@@ -1,24 +1,15 @@
 // Setup the default grid.
 // See the 02-grid-setup example, for a more complete list of how to make custom
 // grids very easily.
-// @include grid-setup((
-//   // This grid has 12 rows.
-//   count: 12,
-//   // The gutter between these rows are 1 %
-//   gutter: 1%,
-//   // The width of the container is 95%
-//   width: 95%,
-//   // But the max width of the container is 1140px.
-//   maxwidth: 1140px
-// ));
-
-
 @include grid-setup((
+  // This grid has 12 rows.
   count: 12,
-  gutter: 20px,
-  column: 70px,
-  width: 90%,
-  maxwidth: 1060px
+  // The gutter between these rows are 1 %
+  gutter: 1%,
+  // The width of the container is 95%
+  width: 95%,
+  // But the max width of the container is 1140px.
+  maxwidth: 1140px
 ));
 
 // Open the "smaller" scope (smaller is just the scope name, you can call it

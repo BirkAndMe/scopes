@@ -1,22 +1,52 @@
 @import 'contrib/sassyjson';
 
+///
+$__scope_js_variables: ();
+
+///
+$__scope_js_activated: false;
+
+///
 @mixin scope-js() {
-  $json: json-encode(scope-module-trigger(SCOPE_JS_GET));
-  /*! scope-js: '#{$json}' */
-
-  .scope-scope {
-    position: absolute;
-    display: none;
-  }
-
-  @include scope-all() {
-    #scope-#{$__scope} {
-      top: 1px;
+  @if ($__scope_js_activated == false) {
+    body:after {
+      display: none;
+      content: json-encode(scope-js-get-data());
     }
+
+    .scope-scope {
+      position: absolute;
+      display: none;
+    }
+
+    @include scope-all() {
+      #scope-#{$__scope} {
+        top: 1px;
+      }
+    }
+
+    $__scope_js_activated: true;
   }
 }
 
-@function scope-js-SCOPE_JS_GET() {
-  @return scope-get-scopes();
+///
+@function scope-js-set-variable($name, $value) {
+  $__scope_js_variables: __map-set($__scope_js_variables, $name, $value) !global;
+
+  @return $value;
 }
-$nop: scope-module-on(SCOPE_JS_GET, 'js');
+
+///
+@function scope-js-get-data() {
+  $data: ();
+
+  @each $scope in scope-get-scopes() {
+    $data: __map-set($data, $scope, scope-module-trigger(SCOPE_JS_GET, $scope));
+  }
+
+  @each $name, $variable in $__scope_js_variables {
+    $data: __map-set($data, '_' + $name, $variable);
+  }
+
+  @return $data;
+}

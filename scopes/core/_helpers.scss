@@ -1,3 +1,7 @@
+////
+/// @group core/helpers
+////
+
 /// Set a single value in a map.
 @function __map-set($map, $key, $value) {
   $buffer: (#{$key}: $value);

@@ -20,15 +20,15 @@ $__scope_grid_maxwidth: null;
 }
 $nop: scope-module-on(SCOPE_ACTIVATE, 'grid');
 
-@function scope-grid-SCOPE_JS_GET() {
-  $grids: ();
-  @each $scope in scope-get-scopes() {
-    $grids: __map-set($grids, $scope, scope-grid-set-globals($scope));
-  }
-
+///
+@function scope-grid-SCOPE_JS_GET($scope) {
+  // $grids: ();
+  // @each $scope in scope-get-scopes() {
+  //   $grids: __map-set($grids, $scope, scope-grid-set-globals($scope));
+  // }
+  $result: scope-grid-set-globals($scope);
   $nop: scope-grid-set-globals();
-
-  @return $grids;
+  @return $result;
 }
 $nop: scope-module-on(SCOPE_JS_GET, 'grid');
 
@@ -37,8 +37,8 @@ $nop: scope-module-on(SCOPE_JS_GET, 'grid');
 /// @param {String} $scope_name ($__scope)
 ///   Name of the scope.
 ///
-/// @return {String}
-///   Scope name.
+/// @return {Map}
+///   A map with all the new variables.
 @function scope-grid-set-globals($scope_name: $__scope) {
   $__scope_grid_count: scope-module-get-variable(grid,
     count,
@@ -211,6 +211,11 @@ $nop: scope-module-on(SCOPE_JS_GET, 'grid');
 ///
 @mixin grid-setup($data, $layout: FLUID, $scope_name: $__scope) {
   $nop: grid-setup($data, $layout, $scope_name);
+
+  // Set the globals, if it's the first time calling grid-setup.
+  @if ($__scope_grid_count == null) {
+    $nop: scope-grid-set-globals($scope_name);
+  }
 }
 
 ///
@@ -219,20 +224,23 @@ $nop: scope-module-on(SCOPE_JS_GET, 'grid');
   &:nth-child(#{$delta}n+1) { clear: left; }
 }
 
+///
 @mixin grid-reset-wrap($delta, $container) {
   &:nth-child(#{$delta}n) { margin-right: grid-gutter($container); }
 	&:nth-child(#{$delta}n+1) { clear: none }
 }
 
+///
 @mixin grid-reset-list($info: $columns of $container, $scope_container: $__scope_grid_count) {
   $columns: nth($info, 1);
-  $container: scope-grid-parse-info($info);
+  $container: _scope-grid-parse-info($info);
 
   @include grid-reset-wrap($container / $columns, $scope_container);
 
 }
 
-@function scope-grid-parse-info($info) {
+///
+@function _scope-grid-parse-info($info) {
   $container: $__scope_grid_count;
   @if (length($info) > 1) {
     $container: nth($info, 3);
@@ -243,7 +251,7 @@ $nop: scope-module-on(SCOPE_JS_GET, 'grid');
 ///
 @mixin grid($info: $columns of $container, $flags: ()) {
   $columns: nth($info, 1);
-  $container: scope-grid-parse-info($info);
+  $container: _scope-grid-parse-info($info);
 
   width: grid-width($columns, $container);
 
@@ -257,6 +265,20 @@ $nop: scope-module-on(SCOPE_JS_GET, 'grid');
 
   @if (__has_flag($flags, LIST)) {
     @include grid-wrap($container / $columns);
+  }
+
+  @if (__has_flag($flags, ALL_SCOPES)) {
+    $buffer: ();
+    @each $flag in $flags {
+      @if ($flag != ALL_SCOPES and $flag != LIST) {
+        $buffer: append($buffer, $flag);
+      }
+    }
+
+    // @debug $buffer;
+    @include scope-all(ONLY_QUERY, grid) {
+      @include grid($columns of $container, $buffer);
+    }
   }
 }
 

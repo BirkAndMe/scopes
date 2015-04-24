@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>example/01-simple</title>
+  <title>Simple</title>
 
   <meta charset="utf-8">
 
@@ -10,35 +10,9 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js"></script>
-  <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css" />
 
-  <style>
-    .prettyprint ol.linenums > li { list-style-type: decimal; }
-  </style>
-
-  <script type="text/javascript">
-  $(function () {
-    var promises = [];
-
-    $('.loadcode').each(function () {
-      var
-        $element = $(this),
-        deferred = new $.Deferred();
-
-      $element.load($element.text(), function () {
-        deferred.resolve();
-      });
-
-      promises.push(deferred);
-    });
-
-    $.when.apply(undefined, promises).then(function () {
-      requestAnimationFrame(function () {
-        prettyPrint();
-      });
-    });
-  });
-  </script>
+  <link type="text/css" rel="stylesheet" href="../_base/exstyle.css" />
+  <script src="../_base/exstyle.js"></script>
 </head>
 <body>
   <div class="container">
@@ -60,27 +34,25 @@
       <div class="list-item">twelve</div>
     </div>
 
-    <p>The above list will change to 3 rows at <code class="prettyprint lang-css">max-width: 1024px</code></p>
+    <p>The above list will change to 3 rows at <code>max-width: 1024px</code>.</p>
 
-    <h2>The 4 scss files.</h2>
-    <p>We use 4 scss files for this example, two of them are simple importer files, one is the settings and the last one is the actual style.</p>
+    <h2>The 3 scss files.</h2>
+    <p>We use 3 scss files for this example, a simple import file, one is the settings and the last one is the actual style.</p>
     <p>Read the inline comments in the files for a more detailed description.</p>
 
     <h3>_base.scss</h3>
-    <p>This file imports all the files needed, so every <em>style</em> scss file should import this file.</p>
-    <pre class="prettyprint lang-scss loadcode">scss/_base.scss</pre>
-
-    <h3>_scopes_modules.scss</h3>
-    <p>This file imports all the scopes modules you want to use. These modules could just as easily be imported in the _base.scss file, and you can skip this extra file, it's a matter of taste.</p>
-    <pre class="prettyprint lang-scss loadcode">scss/_scopes_modules.scss</pre>
+    <p>This file imports all the files needed, so every <em>style</em> scss file should import this file first thing.</p>
+    <pre class="prettyprint lang-scss loadcode linenums">scss/_base.scss</pre>
 
     <h3>_scopes_settings.scss</h3>
     <p>Setup the grid.<br/>Here we setup 1 grid</p>
     <pre class="prettyprint lang-scss loadcode linenums">scss/_scopes_settings.scss</pre>
 
     <h3>style.scss</h3>
-    <p>Setup the grid.<br/>Here we setup 1 grid</p>
+    <p>The actual style</p>
     <pre class="prettyprint lang-scss loadcode linenums">scss/style.scss</pre>
+    <p>Which outputs the following:</p>
+    <pre class="prettyprint lang-css loadcode linenums">css/style.css</pre>
 
   </div>
 </html>
