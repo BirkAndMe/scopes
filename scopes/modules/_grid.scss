@@ -1,3 +1,8 @@
+// @TODO Clean this!!
+//       Meaning remove any leftovers from FIXED (enable it later on).
+//       After removing of FIXED check what global variables are still needed.
+//       We can remove column I think.
+
 /// Ccurrent column count.
 $__scope_grid_count: null;
 
@@ -22,10 +27,6 @@ $nop: scope-module-on(SCOPE_ACTIVATE, 'grid');
 
 ///
 @function scope-grid-SCOPE_JS_GET($scope) {
-  // $grids: ();
-  // @each $scope in scope-get-scopes() {
-  //   $grids: __map-set($grids, $scope, scope-grid-set-globals($scope));
-  // }
   $result: scope-grid-set-globals($scope);
   $nop: scope-grid-set-globals();
   @return $result;
@@ -83,7 +84,11 @@ $nop: scope-module-on(SCOPE_JS_GET, 'grid');
 ///   Total grid count.
 /// @param {Number} $column ($__scope_grid_column)
 ///   Total grid column.
-@function grid-column($container: $__scope_grid_count, $count: $__scope_grid_count, $column: $__scope_grid_column) {
+@function grid-column($container: $__scope_grid_count, $count: $__scope_grid_count, $column: $__scope_grid_column, $gutter: $__scope_grid_gutter) {
+  @if (unit($column) == '%') {
+    @return (100% - $gutter * ($container - 1)) / $container;
+  }
+
   @return ($count / $container) * $column;
 }
 
@@ -101,7 +106,7 @@ $nop: scope-module-on(SCOPE_JS_GET, 'grid');
 ///   Total grid column.
 @function grid-width($columns, $container: $__scope_grid_count, $count: $__scope_grid_count, $gutter: $__scope_grid_gutter, $column: $__scope_grid_column) {
   $gutter: grid-gutter($container, $count, $gutter);
-  $column: grid-column($container, $count, $column);
+  $column: grid-column($container, $count, $column, $gutter);
 
   @return $column * $columns + $gutter * ($columns - 1);
 }
@@ -122,36 +127,25 @@ $nop: scope-module-on(SCOPE_JS_GET, 'grid');
 /// @param {Number} $column ($__scope_grid_column)
 ///   Total grid column.
 @function grid-value($columns, $container: $__scope_grid_count, $count: $__scope_grid_count, $gutter: $__scope_grid_gutter, $column: $__scope_grid_column) {
+  @debug pregutter $gutter;
   $gutter: grid-gutter($container, $count, $gutter);
-  $column: grid-column($container, $count, $column);
+  @debug gutter $gutter;
+  $column: grid-column($container, $count, $column, $gutter);
+
+  @debug gutter $container;
+  @debug gutter $gutter;
+  @debug column $column;
 
   @return $column * $columns + $gutter * $columns;
 }
 
 ///
 @function grid-parse($data, $layout: FLUID) {
-  // TODO: Clean up this function. It works but it seems like a lot of mess.
-  //       There must be a more clever way of parsing the data.
-
   $count: map-get($data, 'count');
   $gutter: map-get($data, 'gutter');
   $column: map-get($data, 'column');
   $width: map-get($data, 'width');
   $maxwidth: map-get($data, 'maxwidth');
-
-  @if ($layout == FIXED) {
-    @if (length($data) < 3) {
-      @debug "Need at least 3 parameters when usig fixed units.";
-      @return false;
-    }
-
-    @if ($width == null) {
-      $width: ($column + $gutter) * $count - $gutter;
-    }
-    @else if ($count == null) {
-      $count: ($width + $gutter) / ($column + $gutter);
-    }
-  }
 
   @if ($count == null) {
     @if (unit($gutter) != '%') {
@@ -189,12 +183,6 @@ $nop: scope-module-on(SCOPE_JS_GET, 'grid');
   // We are sure to have the gutter now, so calculate the column percentage
   // using the count and gutter percentage.
   $column: (100% - $gutter * ($count - 1)) / $count;
-
-  // Transform the gutter and columnn to fixed values if we use this layout.
-  @if ($layout == FIXED) {
-    $gutter: $width * ($gutter / 100%);
-    $column: $width * ($column / 100%);
-  }
 
   @if ($width == AUTO) {
     $width: grid-width($count, $count, $count, $gutter, $column);

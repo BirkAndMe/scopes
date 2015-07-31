@@ -28,11 +28,11 @@
 
   @include test('grid parse') {
 
-    $fluid_1: (count: 10, gutter: 1%, column: 9.1%);
-    $fluid_2: (count: 12, gutter: 2%, column: 6.5%);
+    $fluid_1: (count: 10, gutter: 1%, column: 9.1%, width: null, maxwidth: null);
+    $fluid_2: (count: 12, gutter: 2%, column: 6.5%, width: null, maxwidth: null);
 
-    $fixed_1: (count: 10, gutter: 10px, column: 91px); // width = 1000px
-    $fixed_2: (count: 12, gutter: 24px, column: 78px); // width = 1200px
+    $fixed_1: (count: 10, gutter: 10px, column: 91px, width: 1000px, maxwidth: null); // width = 1000px
+    $fixed_2: (count: 12, gutter: 24px, column: 78px, width: 1200px, maxwidth: null); // width = 1200px
 
     @include assert-equal(
       grid-parse((count: 10, gutter: 1%)) grid-parse((count: 12, gutter: 2%)),

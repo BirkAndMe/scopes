@@ -3,13 +3,26 @@
 ////
 
 /// Set a single value in a map.
+///
+/// @param {Map} $map
+///   Base map, you want to set a variable in.
+/// @param {String} $key
+///   Key to set.
+/// @param {Mixed} $Value
+///   The value.
 @function __map-set($map, $key, $value) {
   $buffer: (#{$key}: $value);
   @return map-merge($map, $buffer);
 }
 
-///
 /// Check if a list has a certain flag.
+///
+/// This is basically a inArray() function.
+///
+/// @param {List} $list
+///   The list to check for the flag.
+/// @param {String} $flag
+///   Flag to search for.
 @function __has_flag($list, $flag) {
   $result: index($list, $flag);
 

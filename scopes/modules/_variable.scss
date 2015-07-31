@@ -1,4 +1,11 @@
+/// Set a variable.
 ///
+/// @param {String} $key
+///   The variable name to set.
+/// @param {mixed} $value
+///   The value to set.
+/// @param {String} $scope_name ($__scope)
+///   Name of the scope.
 @function vset($key, $value: '', $scope_name: $__scope) {
   @if (type-of($key) == map) {
     @return vmerge($key, $scope_name);
@@ -6,14 +13,37 @@
     @return scope-module-set-variable(variables, $key, $value, $scope_name);
   }
 }
+
+/// Wrapper for the vset() function.
+///
+/// @param {String} $key
+///   The variable name to set.
+/// @param {mixed} $value
+///   The value to set.
+///
+/// @alias vset()
 @mixin vset($key, $value: '') { $nop: vset($key, $value); }
 
+/// Get a variable
 ///
+/// @param {String} $key
+///   The variable to get.
+/// @param {mixed} $default_value
+///   A default value to provide if the variable doesn't exist.
+///   When using USE_FALLBACK, it will look up the scope tree to see if any of
+///   the fallback scopes has the variable, and then use that value.
+/// @param {String} $scope_name ($__scope)
+///   Name of the scope.
 @function vget($key, $default_value: USE_FALLBACK, $scope_name: $__scope) {
   @return scope-module-get-variable(variables, $key, $default_value, $scope_name);
 }
 
+/// Merge a map of variables.
 ///
+/// @param {Map} $variables
+///   The map to merge into the current variables.
+/// @param {String} $scope_name ($__scope)
+///   Name of the scope.
 @function vmerge($variables, $scope_name: $__scope) {
   $existing_variables: scope-module-get(variables, $scope_name);
   $existing_variables: map-merge($existing_variables, $variables);

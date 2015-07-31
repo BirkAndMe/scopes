@@ -1,6 +1,6 @@
 body:after {
   display: none;
-  content: '{"default": {"grid": {"count": 12, "gutter": "1%", "column": "7.41667%", "width": "95%", "maxwidth": "1140px"}}, "smaller": {"grid": {"count": 12, "gutter": "2%", "column": "6.5%", "width": "98%", "maxwidth": null}}}'; }
+  content: '{"default": {"grid": {"count": 12, "gutter": "1%", "column": "7.41667%", "width": "95%", "maxwidth": "1140px"}}, "smaller": {"grid": {"count": 12, "gutter": "2%", "column": "6.5%", "width": "98%", "maxwidth": null}}, "tiny": {"grid": {"count": 12, "gutter": "2%", "column": "6.5%", "width": null, "maxwidth": null}}, "between-smaller-and-default": {"grid": {"count": 12, "gutter": "1%", "column": "7.41667%", "width": null, "maxwidth": null}}}'; }
 
 .scope-scope {
   position: absolute;
@@ -11,4 +11,10 @@ body:after {
 
 @media (max-width: 1024px) {
   #scope-smaller {
+    top: 1px; } }
+@media (max-width: 800px) {
+  #scope-tiny {
+    top: 1px; } }
+@media (max-width: 1140px) {
+  #scope-between-smaller-and-default {
     top: 1px; } }

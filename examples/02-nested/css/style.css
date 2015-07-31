@@ -1,3 +1,95 @@
+body {
+  font-family: sans-serif; }
+
+.container {
+  width: 90%;
+  max-width: 1060px;
+  margin: 0 auto; }
+  @media (max-width: 1024px) {
+    .container {
+      width: 98%; } }
+
+.nester:after {
+  content: '';
+  display: block;
+  clear: both; }
+
+.nested-a {
+  width: 66.03774%;
+  margin-right: 1.88679%;
+  float: left;
+  background-color: #eee; }
+  .nested-a .nested-b {
+    width: 35.73113%;
+    margin-right: 2.83019%;
+    float: left;
+    background-color: #99e; }
+  .nested-a .nested-c {
+    width: 61.43868%;
+    float: left;
+    background-color: #9e9; }
+
+.nested-d {
+  width: 40.56604%;
+  margin-right: 1.88679%;
+  float: left;
+  background-color: #ddd; }
+  .nested-d .nested-e {
+    width: 58.18868%;
+    margin-right: 4.5283%;
+    float: left;
+    background-color: #e99; }
+  .nested-d .nested-f {
+    width: 37.28302%;
+    float: left;
+    background-color: #9ee; }
+
+.nested-g {
+  width: 57.54717%;
+  float: left;
+  background-color: #eee; }
+  .nested-g .nested-h {
+    width: 41.00886%;
+    float: left;
+    background-color: #e9e; }
+
+.property {
+  width: 32.07547%;
+  margin-right: 1.88679%;
+  float: left;
+  margin-bottom: 1.88679%;
+  background-color: #ddd; }
+  .property:nth-child(3n) {
+    margin-right: 0; }
+  .property:nth-child(3n+1) {
+    clear: left; }
+  .property .label {
+    width: 20.75472%;
+    margin-right: 5.66038%;
+    float: left;
+    font-weight: bold;
+    padding: 2.83019% 1.41509%;
+    box-sizing: border-box; }
+  .property .value {
+    width: 73.58491%;
+    float: left;
+    padding: 2.83019%;
+    border-left: 1px solid #000;
+    box-sizing: border-box; }
+
+.sub-properties {
+  width: 66.03774%;
+  margin-right: 1.88679%;
+  float: left; }
+  .sub-properties .property {
+    width: 48.58491%;
+    margin-right: 2.83019%;
+    float: left; }
+    .sub-properties .property:nth-child(2n) {
+      margin-right: 0; }
+    .sub-properties .property:nth-child(2n+1) {
+      clear: left; }
+
 .scopes-debug-activated {
   width: 49px;
   height: 55px;

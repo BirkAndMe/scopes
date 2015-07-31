@@ -13,17 +13,17 @@ var scopes = this.scopes || {};
     max_count = 0;
 
   var grid = {
+    /**
+     * Hide the visual grid.
+     */
     hide: function () {
       _visible = false;
-
-      // var outers = document.getElementsByClassName('scopes-debug-grid');
-      // for (var i = 0; i < outers.length; i++) {
-      //   outers[i].remove();
-      // }
-
       document.body.classList.remove('scopes-show-grid');
     },
 
+    /**
+     * Visualize the current grid.
+     */
     show: function () {
       _visible = true;
 

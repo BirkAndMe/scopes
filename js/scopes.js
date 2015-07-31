@@ -166,6 +166,9 @@ var scopes = this.scopes || {};
     var data = window.getComputedStyle(document.body, ':after')
       .getPropertyValue('content')
       .replace(/\\"/g, '"');
+    if (data === 'none') {
+      return;
+    }
     data = JSON.parse(data.substr(0, data.length - 1).substr(1));
 
     // Default the _check_container back to document.body

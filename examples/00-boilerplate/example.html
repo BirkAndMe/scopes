@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Debugging</title>
+
+  <meta charset="utf-8">
+
+  <link type="text/css" rel="stylesheet" href="css/style.css" />
+  <link type="text/css" rel="stylesheet" href="css/debug.css" />
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js"></script>
+
+  <link type="text/css" rel="stylesheet" href="../_base/exstyle.css" />
+  <script src="../_base/exstyle.js"></script>
+
+  <script src="../../js/scopes.js"></script>
+  <script src="../../js/scopes.debug.js"></script>
+  <script src="../../js/scopes.grid.js"></script>
+</head>
+<body>
+  <div class="container">
+    <h1>How to use the debug features.</h1>
+    <p>Using the same <code>_scopes_settings.scss</code> and <code>style.scss</code> as the <a class="example-link">01-simple</a> example.</p>
+
+    <div>
+      <div class="list-item">one</div>
+      <div class="list-item">two</div>
+      <div class="list-item">three</div>
+      <div class="list-item">four</div>
+      <div class="list-item">five</div>
+      <div class="list-item">six</div>
+      <div class="list-item">seven</div>
+      <div class="list-item">eight</div>
+      <div class="list-item">nine</div>
+      <div class="list-item">ten</div>
+      <div class="list-item">eleven</div>
+      <div class="list-item">twelve</div>
+    </div>
+
+    <p>To activate the debugging interface use type <code>IDDQD</code>, while the page is in focus.<br />
+Now debugging is activated, to bring up the grid press the <code>G</code> key.</p>
+    <p class="highlight"><span class="label">Press</span> <code>IDDQD</code> <code>G</code></p>
+
+    <h2>debug.scss</h2>
+    <pre class="prettyprint lang-scss loadcode linenums">scss/debug.scss</pre>
+    <p>Outputs:</p>
+    <pre class="prettyprint lang-css loadcode linenums">css/debug.css</pre>
+
+
+  </div>
+</html>

@@ -1,15 +1,9 @@
 /* ### grid ---------- */
 /* - calculator functions (4 Assertions, 4 Passed, 0 Failed) */
-/* - FAIL: grid parse (9 Assertions, 0 Passed, 9 Failed) */
-/*   - error: (Expected: (count: 10, gutter: 1%, column: 9.1%) (count: 12, gutter: 2%, column: 6.5%), Result: (count: 10, gutter: 1%, column: 9.1%, width: null, maxwidth: null) (count: 12, gutter: 2%, column: 6.5%, width: null, maxwidth: null)) Fluid count, gutter % */
-/*   - error: (Expected: (count: 10, gutter: 1%, column: 9.1%) (count: 12, gutter: 2%, column: 6.5%), Result: (count: 10, gutter: 1%, column: 9.1%, width: null, maxwidth: null) (count: 12, gutter: 2%, column: 6.5%, width: null, maxwidth: null)) Fluid count, column % */
-/*   - error: (Expected: (count: 10, gutter: 1%, column: 9.1%) (count: 12, gutter: 2%, column: 6.5%), Result: (count: 10, gutter: 1%, column: 9.1%, width: null, maxwidth: null) (count: 12, gutter: 2%, column: 6.5%, width: null, maxwidth: null)) Fluid column %, gutter % */
-/*   - error: (Expected: (count: 10, gutter: 1%, column: 9.1%) (count: 12, gutter: 2%, column: 6.5%), Result: (count: 10, gutter: 1%, column: 9.1%, width: null, maxwidth: null) (count: 12, gutter: 2%, column: 6.5%, width: null, maxwidth: null)) Fluid count, gutter px, column px */
-/*   - error: (Expected: (count: 10, gutter: 1%, column: 9.1%) (count: 12, gutter: 2%, column: 6.5%), Result: (count: 10, gutter: 1%, column: 9.1%, width: 1000px, maxwidth: null) (count: 12, gutter: 2%, column: 6.5%, width: 1200px, maxwidth: null)) Fluid count, gutter px, width */
-/*   - error: (Expected: (count: 10, gutter: 1%, column: 9.1%) (count: 12, gutter: 2%, column: 6.5%), Result: (count: 10, gutter: 1%, column: 9.1%, width: 1000px, maxwidth: null) (count: 12, gutter: 2%, column: 6.5%, width: 1200px, maxwidth: null)) Fluid count, column px, width */
-/*   - error: (Expected: (count: 10, gutter: 1%, column: 9.1%) (count: 12, gutter: 2%, column: 6.5%), Result: (count: 10, gutter: 1%, column: 9.1%, width: 1000px, maxwidth: null) (count: 12, gutter: 2%, column: 6.5%, width: 1200px, maxwidth: null)) Fluid gutter px, column px, width */
-/*   - error: (Expected: (count: 10, gutter: 10px, column: 91px) (count: 12, gutter: 24px, column: 78px), Result: (count: 10, gutter: 10px, column: 91px, width: 1000px, maxwidth: null) (count: 12, gutter: 24px, column: 78px, width: 1200px, maxwidth: null)) Fixed gutter, column, width */
-/*   - error: (Expected: (count: 10, gutter: 10px, column: 91px) (count: 12, gutter: 24px, column: 78px), Result: (count: 10, gutter: 10px, column: 91px, width: 1000px, maxwidth: null) (count: 12, gutter: 24px, column: 78px, width: 1200px, maxwidth: null)) Fixed count, gutter, column */
+/* - FAIL: grid parse (9 Assertions, 6 Passed, 3 Failed) */
+/*   - error: (Expected: (count: 10, gutter: 1%, column: 9.1%, width: null, maxwidth: null) (count: 12, gutter: 2%, column: 6.5%, width: null, maxwidth: null), Result: (count: 10, gutter: 1%, column: 9.1%, width: 1000px, maxwidth: null) (count: 12, gutter: 2%, column: 6.5%, width: 1200px, maxwidth: null)) Fluid count, gutter px, width */
+/*   - error: (Expected: (count: 10, gutter: 1%, column: 9.1%, width: null, maxwidth: null) (count: 12, gutter: 2%, column: 6.5%, width: null, maxwidth: null), Result: (count: 10, gutter: 1%, column: 9.1%, width: 1000px, maxwidth: null) (count: 12, gutter: 2%, column: 6.5%, width: 1200px, maxwidth: null)) Fluid count, column px, width */
+/*   - error: (Expected: (count: 10, gutter: 1%, column: 9.1%, width: null, maxwidth: null) (count: 12, gutter: 2%, column: 6.5%, width: null, maxwidth: null), Result: (count: 10, gutter: 1%, column: 9.1%, width: 1000px, maxwidth: null) (count: 12, gutter: 2%, column: 6.5%, width: 1200px, maxwidth: null)) Fluid gutter px, column px, width */
 /*
 */
 /* 2 Tests: */

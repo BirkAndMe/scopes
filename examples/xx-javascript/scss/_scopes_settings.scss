@@ -36,3 +36,26 @@
     width: 98%
   ));
 }
+
+@include scope(tiny) {
+  // Settings for this scope (these can be passed as the second argument to the
+  // scope mixin used above).
+  @include scope-settings((
+    // The css media query.
+    query: 'max-width: 800px',
+    // This scope will fallback on the default scope.
+    // See 04-fallback example for better understanding how fallback works.
+    fallback: smaller
+  ));
+}
+@include scope(between-smaller-and-default) {
+  // Settings for this scope (these can be passed as the second argument to the
+  // scope mixin used above).
+  @include scope-settings((
+    // The css media query.
+    query: 'max-width: 1140px',
+    // This scope will fallback on the default scope.
+    // See 04-fallback example for better understanding how fallback works.
+    fallback: default
+  ));
+}

@@ -16,7 +16,7 @@ var scopes = this.scopes || {};
 
     if (enable_code === current_string) {
       debug.activate();
-      root.domRemoveEvent(window, 'keyup', this);
+      root._domRemoveEvent(window, 'keyup', this);
     }
   }
 
@@ -26,20 +26,23 @@ var scopes = this.scopes || {};
   /** */
   var debug = {
     /**
+     * Enables debugging.
      *
+     * This doesn't activate debugging, you still need to press the "secret"
+     * key sequence to activate debugging.
      */
     enable: function () {
       enable_code = root.getSetting('debug').toUpperCase();
-      root.domEvent(window, 'keyup', keyEnabler);
+      root._domEvent(window, 'keyup', keyEnabler);
     },
 
     /**
-     *
+     * This will activate the debugging modules.
      */
     activate: function () {
-      root.domRemoveEvent(window, 'keyup', keyEnabler);
+      root._domRemoveEvent(window, 'keyup', keyEnabler);
 
-      root.domEvent(window, 'keyup', function (evt) {
+      root._domEvent(window, 'keyup', function (evt) {
         var key = String.fromCharCode(evt.keyCode);
         if (typeof debug_modules[key] === 'function') {
           debug_modules[key]();
@@ -51,7 +54,7 @@ var scopes = this.scopes || {};
     },
 
     /**
-     *
+     * Notify the user they have activated debugging.
      */
     godmode: function () {
       var godmode = document.createElement('div');
@@ -70,7 +73,15 @@ var scopes = this.scopes || {};
     },
 
     /**
+     * Add different modules to the debugging.
      *
+     * A module consists of a single key (which is pressed to activate it), and
+     * a callback function, that handles what ever needs handling.
+     *
+     * @param {String} key
+     *   The key that activates the module.
+     * @param {Function} callback
+     *   Function called, when the key is pressed.
      */
     addModule: function (key, callback) {
       debug_modules[key.toUpperCase()] = callback;
@@ -78,9 +89,10 @@ var scopes = this.scopes || {};
   };
   root.debug = debug;
 
+  // Hook into the scopes inits.
   root.inits = root.inits || [];
   root.inits.push(function () {
-    // Enable debugging (if it's enabled).
+    // Check with the scopes settings to see if debugging is enabled.
     if (root.getSetting('debug') !== false) {
       debug.enable();
     }
