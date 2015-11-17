@@ -31,6 +31,9 @@ $__scope_js_activated: false;
 
 ///
 @function scope-js-set-variable($name, $value) {
+  @if ($__scope_js_activated == true) {
+    @warn 'The scope-js mixin is already included, new variables will not be added.'
+  }
   $__scope_js_variables: __map-set($__scope_js_variables, $name, $value) !global;
 
   @return $value;
