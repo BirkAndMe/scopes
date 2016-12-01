@@ -1,39 +1,55 @@
-// @TODO Clean this!!
-//       Meaning remove any leftovers from FIXED (enable it later on).
-//       After removing of FIXED check what global variables are still needed.
-//       We can remove column I think.
+////
+/// @group module/grid
+////
 
-/// Ccurrent column count.
+/// Current column count.
+/// @access private
 $__scope_grid_count: null;
 
 /// Current gutter width.
+/// @access private
 $__scope_grid_gutter: null;
 
 /// Current columnn width.
+/// @access private
 $__scope_grid_column: null;
 
 /// Current columnn width.
+/// @access private
 $__scope_grid_width: null;
 
 /// Current columnn width.
+/// @access private
 $__scope_grid_maxwidth: null;
 
 /// Set the global grid variables on scope activate.
+///
+/// @name [hook-]SCOPE_ACTIVATE
 @function scope-grid-SCOPE_ACTIVATE($current_scope, $new_scope) {
   $nop: scope-grid-set-globals($new_scope);
   @return true;
 }
 $nop: scope-module-on(SCOPE_ACTIVATE, 'grid');
 
+/// The js module uses this to get the global grid variables.
 ///
+/// @name [hook-]SCOPE_JS_GET
 @function scope-grid-SCOPE_JS_GET($scope) {
+  // Get the map of grid variables.
   $result: scope-grid-set-globals($scope);
+
+  // Reset the scope to the current scope.
   $nop: scope-grid-set-globals();
+
   @return $result;
 }
 $nop: scope-module-on(SCOPE_JS_GET, 'grid');
 
 /// Set the global grid variables.
+///
+/// This is automatically called when the scope is changed.
+///
+/// @access private
 ///
 /// @param {String} $scope_name ($__scope)
 ///   Name of the scope.
@@ -61,86 +77,32 @@ $nop: scope-module-on(SCOPE_JS_GET, 'grid');
     maxwidth,
     null, $scope_name) !global;
 
-  @return (count: $__scope_grid_count, gutter: $__scope_grid_gutter, column: $__scope_grid_column, width: $__scope_grid_width, maxwidth: $__scope_grid_maxwidth);
+  @return (
+    count: $__scope_grid_count,
+    gutter: $__scope_grid_gutter,
+    column: $__scope_grid_column,
+    width: $__scope_grid_width,
+    maxwidth: $__scope_grid_maxwidth
+  );
 }
 
-/// Get the grid gutter width.
+/// Parses an unfinished grid variables array.
 ///
-/// @param {Integer} $container ($__scope_grid_count)
-///   Count of columns in the current container.
-/// @param {Integer} $count ($__scope_grid_count)
-///   Total grid count.
-/// @param {Number} $gutter ($__scope_grid_gutter)
-///   Total grid gutter.
-@function grid-gutter($container: $__scope_grid_count, $count: $__scope_grid_count, $gutter: $__scope_grid_gutter) {
-  @return ($count / $container) * $gutter;
-}
-
-/// Get the grid column width.
+/// It's not needed to fill out all the variables, but depending on what's
+/// filled it will calculate the others.
 ///
-/// @param {Integer} $container ($__scope_grid_count)
-///   Count of columns in the current container.
-/// @param {Integer} $count ($__scope_grid_count)
-///   Total grid count.
-/// @param {Number} $column ($__scope_grid_column)
-///   Total grid column.
-@function grid-column($container: $__scope_grid_count, $count: $__scope_grid_count, $column: $__scope_grid_column, $gutter: $__scope_grid_gutter) {
-  @if (unit($column) == '%') {
-    @return (100% - $gutter * ($container - 1)) / $container;
-  }
-
-  @return ($count / $container) * $column;
-}
-
-/// Get the width of X columns.
+/// If the function isn't given enough variables it will throw an error.
 ///
-/// @param {Integer} $columns
-///   Number of columns to get the width of.
-/// @param {Integer} $container ($__scope_grid_count)
-///   Count of columns in the current container.
-/// @param {Integer} $count ($__scope_grid_count)
-///   Total grid count.
-/// @param {Number} $gutter ($__scope_grid_gutter)
-///   Total grid gutter.
-/// @param {Number} $column ($__scope_grid_column)
-///   Total grid column.
-@function grid-width($columns, $container: $__scope_grid_count, $count: $__scope_grid_count, $gutter: $__scope_grid_gutter, $column: $__scope_grid_column) {
-  $gutter: grid-gutter($container, $count, $gutter);
-  $column: grid-column($container, $count, $column, $gutter);
-
-  @return $column * $columns + $gutter * ($columns - 1);
-}
-
-/// Get the "grid value" of X columns.
+/// @access private
 ///
-/// The "grid value" is the start position of a column, or in other words
-/// grid-width(X) + grid-gutter(1).
+/// @param {map} $data
+///   A map with all or some of the grid variables.
 ///
-/// @param {Integer} $columns
-///   Number of columns to get the width of.
-/// @param {Integer} $container ($__scope_grid_count)
-///   Count of columns in the current container.
-/// @param {Integer} $count ($__scope_grid_count)
-///   Total grid count.
-/// @param {Number} $gutter ($__scope_grid_gutter)
-///   Total grid gutter.
-/// @param {Number} $column ($__scope_grid_column)
-///   Total grid column.
-@function grid-value($columns, $container: $__scope_grid_count, $count: $__scope_grid_count, $gutter: $__scope_grid_gutter, $column: $__scope_grid_column) {
-  @debug pregutter $gutter;
-  $gutter: grid-gutter($container, $count, $gutter);
-  @debug gutter $gutter;
-  $column: grid-column($container, $count, $column, $gutter);
-
-  @debug gutter $container;
-  @debug gutter $gutter;
-  @debug column $column;
-
-  @return $column * $columns + $gutter * $columns;
-}
-
+///   This can be count, gutter, column, width or maxwidth.
 ///
-@function grid-parse($data, $layout: FLUID) {
+/// @return {map}
+///   The completed map containing count, gutter, column, width and maxwidth.
+@function grid-parse($data) {
   $count: map-get($data, 'count');
   $gutter: map-get($data, 'gutter');
   $column: map-get($data, 'column');
@@ -148,6 +110,11 @@ $nop: scope-module-on(SCOPE_JS_GET, 'grid');
   $maxwidth: map-get($data, 'maxwidth');
 
   @if ($count == null) {
+    @if ($width == null) {
+      @error 'Grid settings need a width if there is no count.';
+    }
+
+    // Change the gutter to %.
     @if (unit($gutter) != '%') {
       $gutter: percentage($gutter / $width);
     }
@@ -184,36 +151,181 @@ $nop: scope-module-on(SCOPE_JS_GET, 'grid');
   // using the count and gutter percentage.
   $column: (100% - $gutter * ($count - 1)) / $count;
 
-  @if ($width == AUTO) {
-    $width: grid-width($count, $count, $count, $gutter, $column);
-  }
-
   @return (count: $count, gutter: $gutter, column: $column, width: $width, maxwidth: $maxwidth);
 }
 
+/// Setup the grid for the given scope.
 ///
-@function grid-setup($data, $layout: FLUID, $scope_name: $__scope) {
-  @return scope-module-set(grid, grid-parse($data, $layout), $scope_name);
+/// @access private
+///
+/// @param {map} $data
+///   This data is passed along to grid-parse().
+/// @param {String} $scope_name ($__scope)
+///   Name of the scope.
+///
+/// @return {map}
+///   The parsed data map.
+@function grid-setup($data, $scope_name: $__scope) {
+  @return scope-module-set(grid, grid-parse($data), $scope_name);
 }
 
+/// Setup the grid.
 ///
-@mixin grid-setup($data, $layout: FLUID, $scope_name: $__scope) {
-  $nop: grid-setup($data, $layout, $scope_name);
-
+/// Wraps the grid-setup function, and makes sure to select the default grid if
+/// no grid is selected.
+///
+/// @param {map} $data
+///   This data is passed along to grid-parse().
+/// @param {String} $scope_name ($__scope)
+///   Name of the scope.
+@mixin grid-setup($data, $scope_name: $__scope) {
+  $nop: grid-setup($data, $scope_name);
   // Set the globals, if it's the first time calling grid-setup.
   @if ($__scope_grid_count == null) {
     $nop: scope-grid-set-globals($scope_name);
   }
 }
 
+/// Get the grid gutter width.
 ///
+/// @param {Integer} $container ($__scope_grid_count)
+///   Count of columns in the current container.
+/// @param {Integer} $count ($__scope_grid_count)
+///   Total grid count.
+/// @param {Number} $gutter ($__scope_grid_gutter)
+///   Total grid gutter.
+///
+/// @return {Number}
+///   The gutter width.
+@function grid-gutter($container: $__scope_grid_count, $count: $__scope_grid_count, $gutter: $__scope_grid_gutter) {
+  @return ($count / $container) * $gutter;
+}
+
+/// Get the grid column width.
+///
+/// This is the width of a single column.
+///
+/// @param {Integer} $container ($__scope_grid_count)
+///   Count of columns in the current container.
+/// @param {Integer} $count ($__scope_grid_count)
+///   Total grid count.
+/// @param {Number} $column ($__scope_grid_column)
+///   Total grid column width.
+/// @param {Number} $gutter
+///   Width of a single gutter.
+///
+/// @return {Number}
+///   Width of a single column.
+@function grid-column(
+  $container: $__scope_grid_count,
+  $count: $__scope_grid_count,
+  $column: $__scope_grid_column,
+  $gutter: $__scope_grid_gutter
+) {
+  // @TODO: Is this leftovers from the fixed layout?
+  @if (unit($column) == '%') {
+    @return (100% - $gutter * ($container - 1)) / $container;
+  }
+
+  @return ($count / $container) * $column;
+}
+
+/// Get the width of X columns.
+///
+/// @param {Integer} $columns
+///   Number of columns to get the width of.
+/// @param {Integer} $container ($__scope_grid_count)
+///   Count of columns in the current container.
+/// @param {Integer} $count ($__scope_grid_count)
+///   Total grid count.
+/// @param {Number} $gutter ($__scope_grid_gutter)
+///   Total grid gutter.
+/// @param {Number} $column ($__scope_grid_column)
+///   Total grid column.
+///
+/// @return {Number}
+///   The total width of all the columns, without the last gutter width.
+@function grid-width($columns, $container: $__scope_grid_count, $count: $__scope_grid_count, $gutter: $__scope_grid_gutter, $column: $__scope_grid_column) {
+  $gutter: grid-gutter($container, $count, $gutter);
+  $column: grid-column($container, $count, $column, $gutter);
+
+  @return $column * $columns + $gutter * ($columns - 1);
+}
+
+/// Get the grid start position of X columns.
+///
+/// The "grid value" is the start position of a column, or in other words it's
+/// a wrapper for: grid-width(X) + grid-gutter(1).
+///
+/// @param {Integer} $columns
+///   Number of columns to get the width of.
+/// @param {Integer} $container ($__scope_grid_count)
+///   Count of columns in the current container.
+/// @param {Integer} $count ($__scope_grid_count)
+///   Total grid count.
+/// @param {Number} $gutter ($__scope_grid_gutter)
+///   Total grid gutter.
+/// @param {Number} $column ($__scope_grid_column)
+///   Total grid column.
+///
+/// @return {Number}
+///   The total width of the columns including gutter on the last column.
+@function grid-value($columns, $container: $__scope_grid_count, $count: $__scope_grid_count, $gutter: $__scope_grid_gutter, $column: $__scope_grid_column) {
+  $gutter: grid-gutter($container, $count, $gutter);
+  $column: grid-column($container, $count, $column, $gutter);
+
+  @return $column * $columns + $gutter * $columns;
+}
+
+/// Wrap elements at element X.
+///
+/// This is useful when making lists.
+///
+/// @example scss - List of 3 elements per row in a 12 column layout.
+///   .element {
+///     // Sets the width of the element to 4 columns.
+///     @include grid(4);
+///     // Sets it so after every third element the float is cleared.
+///     @include grid-wrap(3);
+///   }
+///
+/// @param {Integer} $delta
+///   At what number of element to wrap.
 @mixin grid-wrap($delta) {
   &:nth-child(#{$delta}n) { margin-right: 0; }
   &:nth-child(#{$delta}n+1) { clear: left; }
 }
 
+/// A way to reset the wrapper created by grid-wrap.
 ///
-@mixin grid-reset-wrap($delta, $container) {
+/// When working with breakpoints, that change the number of elements per row,
+/// you need reset the wrapper created by grid-wrap (and most likely create a
+/// new "wrap" after the reset).
+///
+/// @example.scss - List of 3 elements that becomes 2 in a smaller breakpoint (using 12 columnns in both breakpoints).
+///   .element {
+///     // Sets the width of the element to 4 columns.
+///     @include grid(4);
+///     // Sets it so after every third element the float is cleared.
+///     @include grid-wrap(3);
+///
+///     @include scope(smaller) {
+///       // Clear the current wrapper at the third element.
+///       @include grid-reset-wrap(3);
+///       // Set the new wrapper at every other element.
+///       @include grid-wrap(2);
+///       // Also change the width so it fills the grid.
+///       @include grid(6);
+///     }
+///   }
+///
+/// @param {Integer} $delta
+///   At what number of element to wrap.
+/// @param {Integer} $container
+///   The column count of the container, the element is inside.
+///
+///   This is needed to reset the right margin again.
+@mixin grid-reset-wrap($delta, $container: $__scope_grid_count) {
   &:nth-child(#{$delta}n) { margin-right: grid-gutter($container); }
 	&:nth-child(#{$delta}n+1) { clear: none }
 }
@@ -224,7 +336,6 @@ $nop: scope-module-on(SCOPE_JS_GET, 'grid');
   $container: _scope-grid-parse-info($info);
 
   @include grid-reset-wrap($container / $columns, $scope_container);
-
 }
 
 ///
@@ -237,11 +348,34 @@ $nop: scope-module-on(SCOPE_JS_GET, 'grid');
 }
 
 ///
+@mixin grid-table() {
+  table-layout: fixed;
+  th, td {
+    box-sizing: border-box;
+  }
+}
+
+///
 @mixin grid($info: $columns of $container, $flags: ()) {
   $columns: nth($info, 1);
   $container: _scope-grid-parse-info($info);
 
-  width: grid-width($columns, $container);
+  @if (not __has_flag($flags, IS_TABLE)) {
+    width: grid-width($columns, $container);
+  } @else {
+    @if (not __has_flag($flags, LAST_COLUMN)) {
+      width: grid-width($columns, $container) + grid-gutter($container);
+    } @else {
+      width: grid-width($columns, $container);
+    }
+
+    @if (__has_flag($flags, INSIDE_PADDING)) {
+      padding-right: grid-gutter($container);
+    }
+
+    $flags: append($flags, NO_MARGIN);
+    $flags: append($flags, NO_FLOAT);
+  }
 
   @if (not __has_flag($flags, NO_MARGIN)) {
     margin-right: grid-gutter($container);
@@ -263,7 +397,6 @@ $nop: scope-module-on(SCOPE_JS_GET, 'grid');
       }
     }
 
-    // @debug $buffer;
     @include scope-all(ONLY_QUERY, grid) {
       @include grid($columns of $container, $buffer);
     }

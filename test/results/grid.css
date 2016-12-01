@@ -1,13 +1,10 @@
 /* ### grid ---------- */
 /* - calculator functions (4 Assertions, 4 Passed, 0 Failed) */
-/* - FAIL: grid parse (9 Assertions, 6 Passed, 3 Failed) */
-/*   - error: (Expected: (count: 10, gutter: 1%, column: 9.1%, width: null, maxwidth: null) (count: 12, gutter: 2%, column: 6.5%, width: null, maxwidth: null), Result: (count: 10, gutter: 1%, column: 9.1%, width: 1000px, maxwidth: null) (count: 12, gutter: 2%, column: 6.5%, width: 1200px, maxwidth: null)) Fluid count, gutter px, width */
-/*   - error: (Expected: (count: 10, gutter: 1%, column: 9.1%, width: null, maxwidth: null) (count: 12, gutter: 2%, column: 6.5%, width: null, maxwidth: null), Result: (count: 10, gutter: 1%, column: 9.1%, width: 1000px, maxwidth: null) (count: 12, gutter: 2%, column: 6.5%, width: 1200px, maxwidth: null)) Fluid count, column px, width */
-/*   - error: (Expected: (count: 10, gutter: 1%, column: 9.1%, width: null, maxwidth: null) (count: 12, gutter: 2%, column: 6.5%, width: null, maxwidth: null), Result: (count: 10, gutter: 1%, column: 9.1%, width: 1000px, maxwidth: null) (count: 12, gutter: 2%, column: 6.5%, width: 1200px, maxwidth: null)) Fluid gutter px, column px, width */
+/* - grid parse (6 Assertions, 6 Passed, 0 Failed) */
 /*
 */
 /* 2 Tests: */
-/*  - 1 Passed */
-/*  - 1 Failed */
+/*  - 2 Passed */
+/*  - 0 Failed */
 /*
 */

@@ -91,9 +91,9 @@ var scopes = this.scopes || {};
   };
 
   /**
-   *
+   * Check if a scope is active.
    */
-  root.checkScope = function (scope_name) {
+  root.isActive = function (scope_name) {
     var element = document.getElementById('scope-' + scope_name);
 
     if (element === null) {
@@ -101,6 +101,13 @@ var scopes = this.scopes || {};
     }
 
     return window.getComputedStyle(element).top === '1px';
+  };
+
+  /**
+   * @deprecated Use the isActive() function instead.
+   */
+  root.checkScope = function (scope_name) {
+    return this.isActive(scope_name);
   };
 
   /**
@@ -114,21 +121,17 @@ var scopes = this.scopes || {};
 
     for (var scope in _scopes) {
       if (this.checkScope(scope) === root.STATE_ACTIVE) {
-        // active.push(_scopes[scope]);
         active[scope] = _scopes[scope];
 
         if (_scopes[scope].state !== root.STATE_ACTIVE) {
-          // changed.push(_scopes[scope]);
           changed[scope] = _scopes[scope];
         }
         _scopes[scope].state = root.STATE_ACTIVE;
 
       } else {
-        // inactive.push(_scopes[scope]);
         inactive[scope] = _scopes[scope];
 
         if (_scopes[scope].state !== root.STATE_INACTIVE) {
-          // changed.push(_scopes[scope]);
           changed[scope] = _scopes[scope];
         }
         _scopes[scope].state = root.STATE_INACTIVE;

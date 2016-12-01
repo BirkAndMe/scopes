@@ -1,0 +1,13 @@
+@import 'base';
+
+body {
+  font-family: sans-serif;
+}
+
+.container {
+  // Using the ALL_SCOPES flag, will add the container mixin to all other
+  // scopes.
+  @include grid-container(ALL_SCOPES);
+
+  margin: 0 auto;
+}

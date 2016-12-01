@@ -1,3 +1,7 @@
+////
+/// @group module/variable
+////
+
 /// Set a variable.
 ///
 /// @param {String} $key
@@ -20,8 +24,6 @@
 ///   The variable name to set.
 /// @param {mixed} $value
 ///   The value to set.
-///
-/// @alias vset()
 @mixin vset($key, $value: '') { $nop: vset($key, $value); }
 
 /// Get a variable

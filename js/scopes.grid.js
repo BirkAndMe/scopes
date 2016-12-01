@@ -65,9 +65,10 @@ var scopes = this.scopes || {};
       max_count = Math.max(max_count, scopes[i].data.grid.count);
     }
 
+    // Make sure the debug is activated.
     if (root.debug !== undefined) {
       root.debug.addModule('G', function () {
-        root.grid.toggleVisibility()
+        root.grid.toggleVisibility();
       });
     }
   });

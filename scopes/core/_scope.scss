@@ -133,12 +133,13 @@ $__scopes: ();
 
   // If there's no media query, simply print the content.
   $query: scope-settings-get(query);
+
   @if ($query == false) {
     @content;
   }
   // If there's a media query wrap the content in it.
   @else {
-    @media ($query) { @content; }
+    @media #{$query} { @content; }
   }
 
   // Reset the scope.

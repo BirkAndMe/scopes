@@ -1,0 +1,8 @@
+// Setup the default grid.
+@include grid-setup((
+  count: 12,
+  gutter: 20px,
+  column: 70px,
+  width: 90%,
+  maxwidth: 1140px
+));

@@ -3,6 +3,10 @@ body {
   margin: 0;
 }
 
+.container {
+  margin-bottom: 50px;
+}
+
 .prettyprint ol.linenums > li {
   list-style-type: decimal;
   color: #fff;
@@ -17,6 +21,27 @@ pre {
   font-family: Menlo, 'Bitstream Vera Sans Mono', 'DejaVu Sans Mono', Monaco, Consolas, monospace;
 }
 
+.example {
+  margin: 1em 0;
+}
+
+.code {
+  margin: 1em 0;
+  overflow: auto;
+  zoom: 1;
+}
+.code .piece {
+  float: left;
+  width: 49.5%;
+  box-sizing: border-box;
+}
+.code .piece:first-child {
+  margin-right: 1%;
+}
+.code .piece pre {
+  margin: 0;
+}
+
 p {
   clear: both;
 }
@@ -29,6 +54,15 @@ p {
     p.highlight code {
       background-color: transparent;
     }
+
+.nextup {
+  font-size: 22px;
+  font-weight: bold;
+  padding: 5px;
+  background-color: #eee;
+  display: block;
+  text-align: center;
+}
 
 /* Tomorrow Night Eighties Theme (modified) */
 /* Original theme - https://github.com/chriskempson/tomorrow-theme */

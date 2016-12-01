@@ -1,0 +1,25 @@
+// Base is just a file that includes other files.
+@import 'base';
+
+// Creating the "first" scope.
+@include scope(first) {
+  @include vset('color', #0f0);
+}
+// Creating the "second" scope.
+@include scope(second) {
+  @include vset('color', #00f);
+}
+
+// Open up the first scope.
+@include scope(first) {
+  .using-scope-first {
+    background-color: vget('color');
+  }
+}
+
+// Open up the second scope.
+@include scope(second) {
+  .using-scope-second {
+    background-color: vget('color');
+  }
+}

@@ -20,7 +20,7 @@
   // scope mixin used above).
   @include scope-settings((
     // The css media query.
-    query: 'max-width: 1024px',
+    query: '(max-width: 1024px)',
     // This scope will fallback on the default scope.
     // See 04-fallback example for better understanding how fallback works.
     fallback: default
@@ -42,7 +42,7 @@
   // scope mixin used above).
   @include scope-settings((
     // The css media query.
-    query: 'max-width: 800px',
+    query: '(max-width: 800px)',
     // This scope will fallback on the default scope.
     // See 04-fallback example for better understanding how fallback works.
     fallback: smaller
@@ -53,7 +53,7 @@
   // scope mixin used above).
   @include scope-settings((
     // The css media query.
-    query: 'max-width: 1140px',
+    query: "(max-width: 1140px) and (min-width: 1024px)",
     // This scope will fallback on the default scope.
     // See 04-fallback example for better understanding how fallback works.
     fallback: default

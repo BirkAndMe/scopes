@@ -9,8 +9,8 @@
     );
 
     @include assert-equal(
-      grid-column(5, 10, 9.1%),
-      18.2%,
+      grid-column(5, 10, 9.1%, 1%),
+      19.2%,
       "Single width calculation function"
     );
 
@@ -28,58 +28,35 @@
 
   @include test('grid parse') {
 
-    $fluid_1: (count: 10, gutter: 1%, column: 9.1%, width: null, maxwidth: null);
-    $fluid_2: (count: 12, gutter: 2%, column: 6.5%, width: null, maxwidth: null);
-
-    $fixed_1: (count: 10, gutter: 10px, column: 91px, width: 1000px, maxwidth: null); // width = 1000px
-    $fixed_2: (count: 12, gutter: 24px, column: 78px, width: 1200px, maxwidth: null); // width = 1200px
-
     @include assert-equal(
-      grid-parse((count: 10, gutter: 1%)) grid-parse((count: 12, gutter: 2%)),
-      $fluid_1 $fluid_2,
-      "Fluid count, gutter %"
+      grid-parse((count: 10, gutter: 1%)),
+      (count: 10, gutter: 1%, column: 9.1%, width: null, maxwidth: null),
+      "count, gutter %"
     );
     @include assert-equal(
-      grid-parse((count: 10, column: 9.1%)) grid-parse((count: 12, column: 6.5%)),
-      $fluid_1 $fluid_2,
-      "Fluid count, column %"
+      grid-parse((count: 10, column: 9.1%)),
+      (count: 10, gutter: 1%, column: 9.1%, width: null, maxwidth: null),
+      "count, column %"
     );
     @include assert-equal(
-      grid-parse((column: 9.1%, gutter: 1%)) grid-parse((column: 6.5%, gutter: 2%)),
-      $fluid_1 $fluid_2,
-      "Fluid column %, gutter %"
-    );
-
-    @include assert-equal(
-      grid-parse((count: 10, gutter: 10px, column: 91px)) grid-parse((count: 12, gutter: 24px, column: 78px)),
-      $fluid_1 $fluid_2,
-      "Fluid count, gutter px, column px"
+      grid-parse((count: 10, gutter: 10px, column: 91px)),
+      (count: 10, gutter: 1%, column: 9.1%, width: null, maxwidth: null),
+      "count, gutter px, column px"
     );
     @include assert-equal(
-      grid-parse((count: 10, gutter: 10px, width: 1000px)) grid-parse((count: 12, gutter: 24px, width: 1200px)),
-      $fluid_1 $fluid_2,
-      "Fluid count, gutter px, width"
+      grid-parse((count: 10, gutter: 10px, width: 1000px)),
+      (count: 10, gutter: 1%, column: 9.1%, width: 1000px, maxwidth: null),
+      "count, gutter px, width"
     );
     @include assert-equal(
-      grid-parse((count: 10, column: 91px, width: 1000px)) grid-parse((count: 12, column: 78px, width: 1200px)),
-      $fluid_1 $fluid_2,
-      "Fluid count, column px, width"
+      grid-parse((count: 10, column: 91px, width: 1000px)),
+      (count: 10, gutter: 1%, column: 9.1%, width: 1000px, maxwidth: null),
+      "count, column px, width"
     );
     @include assert-equal(
-      grid-parse((gutter: 10px, column: 91px, width: 1000px)) grid-parse((gutter: 24px, column: 78px, width: 1200px)),
-      $fluid_1 $fluid_2,
-      "Fluid gutter px, column px, width"
-    );
-
-    @include assert-equal(
-      grid-parse((gutter: 10px, column: 91px, width: 1000px), FIXED) grid-parse((gutter: 24px, column: 78px, width: 1200px), FIXED),
-      $fixed_1 $fixed_2,
-      "Fixed gutter, column, width"
-    );
-    @include assert-equal(
-      grid-parse((count: 10, gutter: 10px, column: 91px), FIXED) grid-parse((count: 12, gutter: 24px, column: 78px), FIXED),
-      $fixed_1 $fixed_2,
-      "Fixed count, gutter, column"
+      grid-parse((gutter: 10px, column: 91px, width: 1000px)),
+      (count: 10, gutter: 1%, column: 9.1%, width: 1000px, maxwidth: null),
+      "gutter px, column px, width"
     );
   }
 }

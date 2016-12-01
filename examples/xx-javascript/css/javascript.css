@@ -15,6 +15,6 @@ body:after {
 @media (max-width: 800px) {
   #scope-tiny {
     top: 1px; } }
-@media (max-width: 1140px) {
+@media (max-width: 1140px) and (min-width: 1024px) {
   #scope-between-smaller-and-default {
     top: 1px; } }

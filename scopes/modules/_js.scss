@@ -1,9 +1,13 @@
+////
+/// @group module/javascript
+////
+
 @import 'contrib/sassyjson';
 
-///
+/// @access private
 $__scope_js_variables: ();
 
-///
+/// @access private
 $__scope_js_activated: false;
 
 ///
